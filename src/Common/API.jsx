@@ -2,7 +2,7 @@ import axios from "axios";
 
 const APIService = async ({ question, onResponse, retries = 2 }) => {
   // const API_KEY = "AIzaSyAiUqUOYbZs2blgfFRBiD6XGyBeZKTiQRI";
-  const API_KEY = "AIzaSyCB27wjZdNO9d6t0J6QOBj_UyC60Fu2uZc";
+  const API_KEY = "AIzaSyA5LvfEmFVYTClY-UoK2oev43_bByuW_ng";
 
   const makeRequest = async (attempt = 1) => {
     try {

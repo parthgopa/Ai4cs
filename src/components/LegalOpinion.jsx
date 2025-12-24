@@ -281,7 +281,7 @@ Exclude any introductory notes, prefaces,end notes or disclaimers from the outpu
       )}
 
       {/* Add some CSS for the spinner animation */}
-      <style jsx="true">{`
+      <style jsx={value.toString()}>{`
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }

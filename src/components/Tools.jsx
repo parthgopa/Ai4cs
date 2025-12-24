@@ -1,287 +1,311 @@
-import React, { useState } from 'react';
-import { Container, Row, Col, Card, Form } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
-import '../styles/Tools.css';
+import React, { useState } from "react";
+import { Container, Row, Col, Card, Form } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
+import "../styles/Tools.css";
 // Import icons
-import { FaCalendarAlt, FaBalanceScale, FaGavel, FaChartLine, FaClipboardList, FaBook, FaFileAlt, FaSearch, FaEnvelope, FaFileInvoice } from 'react-icons/fa';
-import { MdUpdate, MdAssessment, MdOutlineAppRegistration } from 'react-icons/md';
+import {
+  FaCalendarAlt,
+  FaBalanceScale,
+  FaGavel,
+  FaChartLine,
+  FaClipboardList,
+  FaBook,
+  FaFileAlt,
+  FaSearch,
+  FaEnvelope,
+  FaFileInvoice,
+} from "react-icons/fa";
+import {
+  MdUpdate,
+  MdAssessment,
+  MdOutlineAppRegistration,
+} from "react-icons/md";
 // Import ComingSoonModal component
-import ComingSoonModal from './ComingSoonModal';
+import ComingSoonModal from "./ComingSoonModal";
 
 const Tools = () => {
   const navigate = useNavigate();
-  
+
   // State for ComingSoonModal
   const [showModal, setShowModal] = useState(false);
-  const [selectedFeature, setSelectedFeature] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  
+  const [selectedFeature, setSelectedFeature] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+
   // Function to open modal with feature title
   const openComingSoonModal = (featureTitle) => {
     setSelectedFeature(featureTitle);
     setShowModal(true);
   };
-  
+
   // Function to close modal
   const closeModal = () => {
     setShowModal(false);
   };
-  
+
   // List of functionalities with icons and categories
   const functionalities = [
     {
-      id: 'compliance-calendar',
-      title: 'Compliance Calendar',
-      category: 'Compliance',
+      id: "compliance-calendar",
+      title: "Compliance Calendar",
+      category: "Compliance",
       icon: <FaCalendarAlt />,
     },
     {
-      id: 'regulatory-updation',
-      title: 'Regulatory Compass',
-      category: 'Compliance',
+      id: "regulatory-updation",
+      title: "Regulatory Compass",
+      category: "Compliance",
       icon: <MdUpdate />,
     },
     {
-      id: 'procedure-practice',
-      title: 'Procedure and Practice',
-      category: 'Compliance',
+      id: "procedure-practice",
+      title: "Procedure and Practice",
+      category: "Compliance",
       icon: <FaClipboardList />,
     },
     {
-      id: 'forms',
-      title: 'Forms',
-      category: 'Compliance',
+      id: "forms",
+      title: "Forms",
+      category: "Compliance",
       icon: <FaFileAlt />,
     },
     {
-      id: 'secretarial-audit-toolkit',
-      title: 'Secretarial Audit Toolkit',
-      category: 'Audit',
+      id: "secretarial-audit-toolkit",
+      title: "Secretarial Audit Toolkit",
+      category: "Audit",
       icon: <FaBalanceScale />,
     },
     {
-      id: 'statutory-registers',
-      title: 'Statutory Register and Records',
-      category: 'Records',
+      id: "statutory-registers",
+      title: "Statutory Register and Records",
+      category: "Records",
       icon: <FaBook />,
     },
     {
-      id: 'legal-opinion',
-      title: 'Legal Opinion',
-      category: 'Legal',
+      id: "legal-opinion",
+      title: "Legal Opinion",
+      category: "Legal",
       icon: <FaGavel />,
     },
     {
-      id: 'legal-research',
-      title: 'Legal Research',
-      category: 'Legal',
+      id: "legal-research",
+      title: "Legal Research",
+      category: "Legal",
       icon: <FaBalanceScale />,
     },
     {
-      id: 'research-assistant',
-      title: 'Research Assistant',
-      category: 'Legal',
+      id: "research-assistant",
+      title: "Research Assistant",
+      category: "Legal",
       icon: <FaSearch />,
     },
     {
-      id: 'scenario-solver',
-      title: 'Scenario Solver',
-      category: 'Legal',
+      id: "scenario-solver",
+      title: "Scenario Solver",
+      category: "Legal",
       icon: <FaChartLine />,
     },
     {
-      id: 'case-digest',
-      title: 'Case Digest',
-      category: 'Legal',
+      id: "case-digest",
+      title: "Case Digest",
+      category: "Legal",
       icon: <FaGavel />,
     },
     {
-      id: 'judgment-simulator',
-      title: 'Judgment Simulator',
-      category: 'Legal',
+      id: "judgment-simulator",
+      title: "Judgment Simulator",
+      category: "Legal",
       icon: <FaGavel />,
     },
     {
-      id: 'policy-drafting',
-      title: 'Policy Drafting',
-      category: 'Policy',
+      id: "policy-drafting",
+      title: "Policy Drafting",
+      category: "Policy",
       icon: <FaClipboardList />,
     },
     {
-      id: 'agreement-drafting',
-      title: 'Agreement Drafting',
-      category: 'Agreement',
+      id: "agreement-drafting",
+      title: "Agreement Drafting",
+      category: "Agreement",
       icon: <MdAssessment />,
     },
     {
-      id: 'capital-raising-advisory-agreement',
-      title: 'Capital Raising Advisory Agreement',
-      category: 'Agreement',
+      id: "capital-raising-advisory-agreement",
+      title: "Capital Raising Advisory Agreement",
+      category: "Agreement",
       icon: <MdAssessment />,
     },
     {
-      id: 'reply-to-notice-rd',
-      title: 'Reply to Notice - RD',
-      category: 'Notices',
+      id: "reply-to-notice-rd",
+      title: "Reply to Notice - RD",
+      category: "Notices",
       icon: <MdOutlineAppRegistration />,
     },
     {
-      id: 'reply-to-notice-nclt',
-      title: 'Reply to Notice - NCLT',
-      category: 'Notices',
+      id: "reply-to-notice-nclt",
+      title: "Reply to Notice - NCLT",
+      category: "Notices",
       icon: <MdOutlineAppRegistration />,
     },
     {
-      id: 'reply-to-notice-roc',
-      title: 'Reply to Notice - ROC',
-      category: 'Notices',
+      id: "reply-to-notice-roc",
+      title: "Reply to Notice - ROC",
+      category: "Notices",
       icon: <MdOutlineAppRegistration />,
     },
     {
-      id: 'petetion-preparator',
-      title: 'Petition Preparator',
-      category: 'Petition',
+      id: "petetion-preparator",
+      title: "Petition Preparator",
+      category: "Petition",
       icon: <MdOutlineAppRegistration />,
     },
     {
-      id: 'board-meeting-assistant',
-      title: 'Board Meeting Assistant',
-      category: 'Meetings',
+      id: "board-meeting-assistant",
+      title: "Board Meeting Assistant",
+      category: "Meetings",
       icon: <FaClipboardList />,
     },
     {
-      id: 'general-meeting-assistant',
-      title: 'General Meeting Assistant',
-      category: 'Meetings',
+      id: "general-meeting-assistant",
+      title: "General Meeting Assistant",
+      category: "Meetings",
       icon: <FaCalendarAlt />,
     },
     {
-      id: 'email-drafter',
-      title: 'Email Drafter',
-      category: 'Utility',
+      id: "email-drafter",
+      title: "Email Drafter",
+      category: "Utility",
       icon: <FaEnvelope />,
     },
     {
-      id: 'resolution-assistant',
-      title: 'Resolution Assistant',
-      category: 'Utility',
+      id: "resolution-assistant",
+      title: "Resolution Assistant",
+      category: "Utility",
       icon: <FaGavel />,
     },
     {
-      id: 'mini-law-library',
-      title: 'Mini-Law Library',
-      category: 'Utility',
+      id: "mini-law-library",
+      title: "Mini-Law Library",
+      category: "Utility",
       icon: <FaBook />,
     },
     {
-      id: 'valuation-report',
-      title: 'Valuation Report',
-      category: 'Reports',
-      icon: <FaFileInvoice />,
+      id: "office-assistant",
+      title: "Office Assistant",
+      category: "Utility",
+      icon: <FaBook />,
     },
   ];
-  
+
   // Implemented/active feature IDs
   const enabledIds = new Set([
-    'compliance-calendar',
-    'secretarial-audit-toolkit',
-    'regulatory-updation',
-    'statutory-registers',
-    'legal-opinion',
-    'legal-research',
-    'procedure-practice',
-    'policy-drafting',
-    'scenario-solver',
-    'agreement-drafting',
-    'reply-to-notice-rd',
-    'reply-to-notice-nclt',
-    'reply-to-notice-roc',
-    'board-meeting-assistant',
-    'general-meeting-assistant',
-    'petetion-preparator',
-    'forms',
-    'capital-raising-advisory-agreement',
-    'mini-law-library',
-    'case-digest',
-    'judgment-simulator',
-    'research-assistant',
-    'resolution-assistant',
-    'email-drafter',
-    'valuation-report'
+    "compliance-calendar",
+    "secretarial-audit-toolkit",
+    "regulatory-updation",
+    "statutory-registers",
+    "legal-opinion",
+    "legal-research",
+    "procedure-practice",
+    "policy-drafting",
+    "scenario-solver",
+    "agreement-drafting",
+    "reply-to-notice-rd",
+    "reply-to-notice-nclt",
+    "reply-to-notice-roc",
+    "board-meeting-assistant",
+    "general-meeting-assistant",
+    "petetion-preparator",
+    "forms",
+    "capital-raising-advisory-agreement",
+    "mini-law-library",
+    "case-digest",
+    "judgment-simulator",
+    "research-assistant",
+    "resolution-assistant",
+    "email-drafter",
+    "valuation-report",
+    "office-assistant"
   ]);
 
   // Get unique categories for filtering
-  const categories = [...new Set(functionalities.map(item => item.category))].sort();
+  const categories = [
+    ...new Set(functionalities.map((item) => item.category)),
+  ].sort();
 
   // State for category filter
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredFunctionalities = functionalities.filter((f) => {
-    const q = searchQuery.trim().toLowerCase();
-    const categoryMatch = selectedCategory === 'All' || f.category === selectedCategory;
     
+    const q = searchQuery.trim().toLowerCase();
+    const categoryMatch =
+      selectedCategory === "All" || f.category === selectedCategory;
+
+    // console.log(f.category)
+
     if (!q) return categoryMatch;
     return (
-      categoryMatch && 
-      (f.title.toLowerCase().includes(q) || 
-      (f.category && f.category.toLowerCase().includes(q)))
+      categoryMatch &&
+      (f.title.toLowerCase().includes(q) ||
+        (f.category && f.category.toLowerCase().includes(q)))
     );
   });
-  
+
   const handleFunctionalityClick = (id, title) => {
     // Navigate to specific pages for implemented features, show modal for others
-    if (id === 'compliance-calendar') {
-      navigate('/compliance-calendar');
-    } else if (id === 'secretarial-audit-toolkit') {
-      navigate('/secretarial-audit-toolkit');
-    } else if (id === 'corporate-governance') {
-      navigate('/corporate-governance');
-    } else if (id === 'regulatory-updation') {
-      navigate('/regulatory-updation');
-    } else if (id === 'statutory-registers') {
-      navigate('/statutory-registers');
-    } else if (id === 'legal-opinion') {
-      navigate('/legal-opinion');
-    } else if (id === 'legal-research') {
-      navigate('/legal-research');
-    } else if (id === 'procedure-practice') {
-      navigate('/procedure-practice');
-    } else if (id === 'policy-drafting') {
-      navigate('/policy-drafting');
-    } else if (id === 'scenario-solver') {
-      navigate('/scenario-solver');
-    } else if (id === 'agreement-drafting') {
-      navigate('/agreement-drafting');
-    } else if (id === 'reply-to-notice-rd') {
-      navigate('/reply-to-notice-rd');
-    } else if (id === 'reply-to-notice-nclt') {
-      navigate('/reply-to-notice-nclt');
-    } else if (id === 'reply-to-notice-roc') {
-      navigate('/reply-to-notice-roc');
-    } else if (id === 'petetion-preparator') {
-      navigate('/petetion-preparator');
-    } else if (id === 'board-meeting-assistant') {
-      navigate('/board-meeting-assistant');
-    } else if (id === 'general-meeting-assistant') {
-      navigate('/general-meeting-assistant');
-    } else if (id === 'forms') {
-      navigate('/forms');
-    } else if (id === 'capital-raising-advisory-agreement') {
-      navigate('/capital-raising-advisory-agreement');
-    } else if (id === 'mini-law-library') {
-      navigate('/mini-law-library');
-    } else if (id === 'case-digest') {
-      navigate('/case-digest');
-    } else if (id === 'judgment-simulator') {
-      navigate('/judgment-simulator');
-    } else if (id === 'research-assistant') {
-      navigate('/research-assistant');
-    } else if (id === 'resolution-assistant') {
-      navigate('/resolution-assistant');
-    } else if (id === 'email-drafter') {
-      navigate('/email-drafter');
-    } else if (id === 'valuation-report') {
-      navigate('/valuation-report');
+    if (id === "compliance-calendar") {
+      navigate("/compliance-calendar");
+    } else if (id === "secretarial-audit-toolkit") {
+      navigate("/secretarial-audit-toolkit");
+    } else if (id === "corporate-governance") {
+      navigate("/corporate-governance");
+    } else if (id === "regulatory-updation") {
+      navigate("/regulatory-updation");
+    } else if (id === "statutory-registers") {
+      navigate("/statutory-registers");
+    } else if (id === "legal-opinion") {
+      navigate("/legal-opinion");
+    } else if (id === "legal-research") {
+      navigate("/legal-research");
+    } else if (id === "procedure-practice") {
+      navigate("/procedure-practice");
+    } else if (id === "policy-drafting") {
+      navigate("/policy-drafting");
+    } else if (id === "scenario-solver") {
+      navigate("/scenario-solver");
+    } else if (id === "agreement-drafting") {
+      navigate("/agreement-drafting");
+    } else if (id === "reply-to-notice-rd") {
+      navigate("/reply-to-notice-rd");
+    } else if (id === "reply-to-notice-nclt") {
+      navigate("/reply-to-notice-nclt");
+    } else if (id === "reply-to-notice-roc") {
+      navigate("/reply-to-notice-roc");
+    } else if (id === "petetion-preparator") {
+      navigate("/petetion-preparator");
+    } else if (id === "board-meeting-assistant") {
+      navigate("/board-meeting-assistant");
+    } else if (id === "general-meeting-assistant") {
+      navigate("/general-meeting-assistant");
+    } else if (id === "forms") {
+      navigate("/forms");
+    } else if (id === "capital-raising-advisory-agreement") {
+      navigate("/capital-raising-advisory-agreement");
+    } else if (id === "mini-law-library") {
+      navigate("/mini-law-library");
+    } else if (id === "case-digest") {
+      navigate("/case-digest");
+    } else if (id === "judgment-simulator") {
+      navigate("/judgment-simulator");
+    } else if (id === "research-assistant") {
+      navigate("/research-assistant");
+    } else if (id === "resolution-assistant") {
+      navigate("/resolution-assistant");
+    } else if (id === "email-drafter") {
+      navigate("/email-drafter");
+    } else if (id === "valuation-report") {
+      navigate("/valuation-report");
+    } else if (id === "office-assistant") {
+      navigate("/office-assistant");
     } else {
       openComingSoonModal(title);
     }
@@ -319,16 +343,20 @@ const Tools = () => {
                 </Col>
                 <Col xs={12} md={6}>
                   <div className="category-filters">
-                    <button 
-                      className={`category-filter ${selectedCategory === 'All' ? 'active' : ''}`}
-                      onClick={() => setSelectedCategory('All')}
+                    <button
+                      className={`category-filter ${
+                        selectedCategory === "All" ? "active" : ""
+                      }`}
+                      onClick={() => setSelectedCategory("All")}
                     >
                       All
                     </button>
-                    {categories.map(category => (
+                    {categories.map((category) => (
                       <button
                         key={category}
-                        className={`category-filter ${selectedCategory === category ? 'active' : ''}`}
+                        className={`category-filter ${
+                          selectedCategory === category ? "active" : ""
+                        }`}
                         onClick={() => setSelectedCategory(category)}
                       >
                         {category}
@@ -348,15 +376,22 @@ const Tools = () => {
               {filteredFunctionalities.length > 0 ? (
                 filteredFunctionalities.map((item) => {
                   const isEnabled = enabledIds.has(item.id);
-                  const cardClass = `tool-card ${isEnabled ? '' : 'disabled-tool'}`;
+                  const cardClass = `tool-card ${
+                    isEnabled ? "" : "disabled-tool"
+                  }`;
                   return (
                     <div key={item.id} className="tool-card-wrapper">
-                      <Card 
+                      <Card
                         className={cardClass}
                         role="button"
                         tabIndex={0}
-                        onClick={() => handleFunctionalityClick(item.id, item.title)}
-                        onKeyDown={(e) => { if (e.key === 'Enter') handleFunctionalityClick(item.id, item.title); }}
+                        onClick={() =>
+                          handleFunctionalityClick(item.id, item.title)
+                        }
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter")
+                            handleFunctionalityClick(item.id, item.title);
+                        }}
                         aria-disabled={!isEnabled}
                       >
                         <Card.Body>
@@ -380,12 +415,12 @@ const Tools = () => {
           </Col>
         </Row>
       </Container>
-      
+
       {/* Coming Soon Modal */}
-      <ComingSoonModal 
-        show={showModal} 
-        handleClose={closeModal} 
-        featureTitle={selectedFeature} 
+      <ComingSoonModal
+        show={showModal}
+        handleClose={closeModal}
+        featureTitle={selectedFeature}
       />
     </main>
   );

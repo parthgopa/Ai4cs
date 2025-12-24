@@ -44,8 +44,8 @@ import JudgmentSimulator from "./components/JudgmentSimulator";
 import ResearchAssistant from "./components/ResearchAssistant";
 import ResolutionAssistant from "./components/ResolutionAssistant";
 import EmailDrafter from "./components/EmailDrafter";
-import ValuationReport from "./components/ValuationReport";
-import PreferentialIssueValuation from "./components/reports/PreferentialIssueValuation";
+import OfficeAssistant from "./components/OfficeAssistant/OfficeAssistant";
+import EmailTool from "./components/OfficeAssistant/EmailTool";
 
 function App() {
   return (
@@ -157,11 +157,9 @@ function App() {
                 element={<ResolutionAssistant />}
               />
               <Route path="/email-drafter" element={<EmailDrafter />} />
-              <Route path="/valuation-report" element={<ValuationReport />} />
-              <Route
-                path="/valuation-report/preferential-issue"
-                element={<PreferentialIssueValuation />}
-              />
+              <Route path="/office-assistant" element={<OfficeAssistant />} />
+              <Route path="/office-assistant/email" element={<EmailTool />} />
+
             </Routes>
           </main>
           <Footer />
