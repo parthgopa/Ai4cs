@@ -23,6 +23,229 @@ import {
 // Import ComingSoonModal component
 import ComingSoonModal from "./ComingSoonModal";
 
+// Tools data - moved outside component for sharing
+const toolsFunctionalities = [
+  {
+    id: "compliance-calendar",
+    title: "Compliance Calendar",
+    category: "Compliance",
+    icon: FaCalendarAlt,
+    route: "/compliance-calendar"
+  },
+  {
+    id: "regulatory-updation",
+    title: "Regulatory Compass",
+    category: "Compliance",
+    icon: MdUpdate,
+    route: "/regulatory-updation"
+  },
+  {
+    id: "procedure-practice",
+    title: "Procedure and Practice",
+    category: "Compliance",
+    icon: FaClipboardList,
+    route: "/procedure-practice"
+  },
+  {
+    id: "forms",
+    title: "Forms",
+    category: "Compliance",
+    icon: FaFileAlt,
+    route: "/forms"
+  },
+  {
+    id: "secretarial-audit-toolkit",
+    title: "Secretarial Audit Toolkit",
+    category: "Audit",
+    icon: FaBalanceScale,
+    route: "/secretarial-audit-toolkit"
+  },
+  {
+    id: "statutory-registers",
+    title: "Statutory Register and Records",
+    category: "Records",
+    icon: FaBook,
+    route: "/statutory-registers"
+  },
+  {
+    id: "legal-opinion",
+    title: "Legal Opinion",
+    category: "Legal",
+    icon: FaGavel,
+    route: "/legal-opinion"
+  },
+  {
+    id: "legal-research",
+    title: "Legal Research",
+    category: "Legal",
+    icon: FaBalanceScale,
+    route: "/legal-research"
+  },
+  {
+    id: "research-assistant",
+    title: "Research Assistant",
+    category: "Legal",
+    icon: FaSearch,
+    route: "/research-assistant"
+  },
+  {
+    id: "scenario-solver",
+    title: "Scenario Solver",
+    category: "Legal",
+    icon: FaChartLine,
+    route: "/scenario-solver"
+  },
+  {
+    id: "case-digest",
+    title: "Case Digest",
+    category: "Legal",
+    icon: FaGavel,
+    route: "/case-digest"
+  },
+  {
+    id: "judgment-simulator",
+    title: "Judgment Simulator",
+    category: "Legal",
+    icon: FaGavel,
+    route: "/judgment-simulator"
+  },
+  {
+    id: "policy-drafting",
+    title: "Policy Drafting",
+    category: "Policy",
+    icon: FaClipboardList,
+    route: "/policy-drafting"
+  },
+  {
+    id: "agreement-drafting",
+    title: "Agreement Drafting",
+    category: "Agreement",
+    icon: MdAssessment,
+    route: "/agreement-drafting"
+  },
+  {
+    id: "capital-raising-advisory-agreement",
+    title: "Capital Raising Advisory Agreement",
+    category: "Agreement",
+    icon: MdAssessment,
+    route: "/capital-raising-advisory-agreement"
+  },
+  {
+    id: "reply-to-notice-rd",
+    title: "Reply to Notice - RD",
+    category: "Notices",
+    icon: MdOutlineAppRegistration,
+    route: "/reply-to-notice-rd"
+  },
+  {
+    id: "reply-to-notice-nclt",
+    title: "Reply to Notice - NCLT",
+    category: "Notices",
+    icon: MdOutlineAppRegistration,
+    route: "/reply-to-notice-nclt"
+  },
+  {
+    id: "reply-to-notice-roc",
+    title: "Reply to Notice - ROC",
+    category: "Notices",
+    icon: MdOutlineAppRegistration,
+    route: "/reply-to-notice-roc"
+  },
+  {
+    id: "petetion-preparator",
+    title: "Petition Preparator",
+    category: "Petition",
+    icon: MdOutlineAppRegistration,
+    route: "/petition-preparator"
+  },
+  {
+    id: "board-meeting-assistant",
+    title: "Board Meeting Assistant",
+    category: "Meetings",
+    icon: FaClipboardList,
+    route: "/board-meeting-assistant"
+  },
+  {
+    id: "general-meeting-assistant",
+    title: "General Meeting Assistant",
+    category: "Meetings",
+    icon: FaCalendarAlt,
+    route: "/general-meeting-assistant"
+  },
+  {
+    id: "email-drafter",
+    title: "Email Drafter",
+    category: "Utility",
+    icon: FaEnvelope,
+    route: "/email-drafter"
+  },
+  {
+    id: "resolution-assistant",
+    title: "Resolution Assistant",
+    category: "Utility",
+    icon: FaGavel,
+    route: "/resolution-assistant"
+  },
+  {
+    id: "mini-law-library",
+    title: "Mini-Law Library",
+    category: "Utility",
+    icon: FaBook,
+    route: "/mini-law-library"
+  },
+  {
+    id: "office-assistant",
+    title: "Office Assistant",
+    category: "Utility",
+    icon: FaBook,
+    route: "/office-assistant"
+  }
+];
+
+// Enabled tool IDs
+const enabledToolIdsFromTools = new Set([
+  "compliance-calendar",
+  "secretarial-audit-toolkit",
+  "regulatory-updation",
+  "statutory-registers",
+  "legal-opinion",
+  "legal-research",
+  "procedure-practice",
+  "policy-drafting",
+  "scenario-solver",
+  "agreement-drafting",
+  "reply-to-notice-rd",
+  "reply-to-notice-nclt",
+  "reply-to-notice-roc",
+  "board-meeting-assistant",
+  "general-meeting-assistant",
+  "petetion-preparator",
+  "forms",
+  "capital-raising-advisory-agreement",
+  "mini-law-library",
+  "case-digest",
+  "judgment-simulator",
+  "research-assistant",
+  "resolution-assistant",
+  "email-drafter",
+  "valuation-report",
+  "office-assistant"
+]);
+
+// Export functions for Header component
+export const getToolsByCategoryFromTools = () => {
+  const categories = {};
+  toolsFunctionalities.forEach(tool => {
+    if (!categories[tool.category]) {
+      categories[tool.category] = [];
+    }
+    categories[tool.category].push(tool);
+  });
+  return categories;
+};
+
+export { enabledToolIdsFromTools };
+
 const Tools = () => {
   const navigate = useNavigate();
 
@@ -42,189 +265,14 @@ const Tools = () => {
     setShowModal(false);
   };
 
-  // List of functionalities with icons and categories
-  const functionalities = [
-    {
-      id: "compliance-calendar",
-      title: "Compliance Calendar",
-      category: "Compliance",
-      icon: <FaCalendarAlt />,
-    },
-    {
-      id: "regulatory-updation",
-      title: "Regulatory Compass",
-      category: "Compliance",
-      icon: <MdUpdate />,
-    },
-    {
-      id: "procedure-practice",
-      title: "Procedure and Practice",
-      category: "Compliance",
-      icon: <FaClipboardList />,
-    },
-    {
-      id: "forms",
-      title: "Forms",
-      category: "Compliance",
-      icon: <FaFileAlt />,
-    },
-    {
-      id: "secretarial-audit-toolkit",
-      title: "Secretarial Audit Toolkit",
-      category: "Audit",
-      icon: <FaBalanceScale />,
-    },
-    {
-      id: "statutory-registers",
-      title: "Statutory Register and Records",
-      category: "Records",
-      icon: <FaBook />,
-    },
-    {
-      id: "legal-opinion",
-      title: "Legal Opinion",
-      category: "Legal",
-      icon: <FaGavel />,
-    },
-    {
-      id: "legal-research",
-      title: "Legal Research",
-      category: "Legal",
-      icon: <FaBalanceScale />,
-    },
-    {
-      id: "research-assistant",
-      title: "Research Assistant",
-      category: "Legal",
-      icon: <FaSearch />,
-    },
-    {
-      id: "scenario-solver",
-      title: "Scenario Solver",
-      category: "Legal",
-      icon: <FaChartLine />,
-    },
-    {
-      id: "case-digest",
-      title: "Case Digest",
-      category: "Legal",
-      icon: <FaGavel />,
-    },
-    {
-      id: "judgment-simulator",
-      title: "Judgment Simulator",
-      category: "Legal",
-      icon: <FaGavel />,
-    },
-    {
-      id: "policy-drafting",
-      title: "Policy Drafting",
-      category: "Policy",
-      icon: <FaClipboardList />,
-    },
-    {
-      id: "agreement-drafting",
-      title: "Agreement Drafting",
-      category: "Agreement",
-      icon: <MdAssessment />,
-    },
-    {
-      id: "capital-raising-advisory-agreement",
-      title: "Capital Raising Advisory Agreement",
-      category: "Agreement",
-      icon: <MdAssessment />,
-    },
-    {
-      id: "reply-to-notice-rd",
-      title: "Reply to Notice - RD",
-      category: "Notices",
-      icon: <MdOutlineAppRegistration />,
-    },
-    {
-      id: "reply-to-notice-nclt",
-      title: "Reply to Notice - NCLT",
-      category: "Notices",
-      icon: <MdOutlineAppRegistration />,
-    },
-    {
-      id: "reply-to-notice-roc",
-      title: "Reply to Notice - ROC",
-      category: "Notices",
-      icon: <MdOutlineAppRegistration />,
-    },
-    {
-      id: "petetion-preparator",
-      title: "Petition Preparator",
-      category: "Petition",
-      icon: <MdOutlineAppRegistration />,
-    },
-    {
-      id: "board-meeting-assistant",
-      title: "Board Meeting Assistant",
-      category: "Meetings",
-      icon: <FaClipboardList />,
-    },
-    {
-      id: "general-meeting-assistant",
-      title: "General Meeting Assistant",
-      category: "Meetings",
-      icon: <FaCalendarAlt />,
-    },
-    {
-      id: "email-drafter",
-      title: "Email Drafter",
-      category: "Utility",
-      icon: <FaEnvelope />,
-    },
-    {
-      id: "resolution-assistant",
-      title: "Resolution Assistant",
-      category: "Utility",
-      icon: <FaGavel />,
-    },
-    {
-      id: "mini-law-library",
-      title: "Mini-Law Library",
-      category: "Utility",
-      icon: <FaBook />,
-    },
-    {
-      id: "office-assistant",
-      title: "Office Assistant",
-      category: "Utility",
-      icon: <FaBook />,
-    },
-  ];
+  // Transform toolsFunctionalities to component format with JSX icons
+  const functionalities = toolsFunctionalities.map(tool => ({
+    ...tool,
+    icon: <tool.icon />
+  }));
 
-  // Implemented/active feature IDs
-  const enabledIds = new Set([
-    "compliance-calendar",
-    "secretarial-audit-toolkit",
-    "regulatory-updation",
-    "statutory-registers",
-    "legal-opinion",
-    "legal-research",
-    "procedure-practice",
-    "policy-drafting",
-    "scenario-solver",
-    "agreement-drafting",
-    "reply-to-notice-rd",
-    "reply-to-notice-nclt",
-    "reply-to-notice-roc",
-    "board-meeting-assistant",
-    "general-meeting-assistant",
-    "petetion-preparator",
-    "forms",
-    "capital-raising-advisory-agreement",
-    "mini-law-library",
-    "case-digest",
-    "judgment-simulator",
-    "research-assistant",
-    "resolution-assistant",
-    "email-drafter",
-    "valuation-report",
-    "office-assistant"
-  ]);
+  // Use shared enabledToolIdsFromTools
+  const enabledIds = enabledToolIdsFromTools;
 
   // Get unique categories for filtering
   const categories = [

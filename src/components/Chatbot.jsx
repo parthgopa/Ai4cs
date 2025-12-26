@@ -11,7 +11,8 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const messagesEndRef = useRef(null);
-  
+  const inputRef = useRef(null);
+
   // Check if device is small screen
   // const isMobileDevice = () => window.innerWidth <= 768;
 
@@ -21,12 +22,19 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
       // scrollToBottom();
     }
   }, [messages, isFullScreen]);
-  
-  
-  // Toggle full screen mode
+
   const toggleFullScreen = () => {
+    // setFocus(true);
+
     setIsFullScreen(!isFullScreen);
   };
+
+  // Focus input when chatbot opens or after response
+  useEffect(() => {
+    if (isOpen && !isLoading) {
+      inputRef.current?.focus();
+    }
+  }, [isOpen, isLoading]);
 
   // const scrollToBottom = () => {
   //   messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -42,7 +50,7 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
       sender: 'user',
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
-    
+
     setMessages(prevMessages => [...prevMessages, userMessage]);
     setInput('');
     setIsLoading(true);
@@ -53,32 +61,33 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
         question: input,
         onResponse: (response) => {
           setIsLoading(false);
-          
+
           // Extract text from Gemini response
-          const botText = response.candidates?.[0]?.content?.parts?.[0]?.text || 
-                         "Sorry, I couldn't process that request.";
-          
+          const botText = response.candidates?.[0]?.content?.parts?.[0]?.text ||
+            "Sorry, I couldn't process that request.";
+
           // Add bot message
           const botMessage = {
             text: botText,
             sender: 'bot',
             timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
           };
-          
+
           setMessages(prevMessages => [...prevMessages, botMessage]);
+
         }
       });
     } catch (error) {
       console.error("Error in chatbot:", error);
       setIsLoading(false);
-      
+
       // Add error message
       const errorMessage = {
         text: "Sorry, there was an error processing your request. Please try again.",
         sender: 'bot',
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
-      
+
       setMessages(prevMessages => [...prevMessages, errorMessage]);
     }
   };
@@ -95,24 +104,24 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
             <span>AI Assistant</span>
           </div>
           <div className="chatbot-controls">
-            <Button 
-              variant="link" 
-              className="control-button" 
+            <Button
+              variant="link"
+              className="control-button"
               onClick={toggleFullScreen}
               aria-label={isFullScreen ? "Exit full screen" : "Full screen"}
             >
               {isFullScreen ? <FaCompress /> : <FaExpand />}
             </Button>
-            <Button 
-              variant="link" 
-              className="close-button" 
+            <Button
+              variant="link"
+              className="close-button"
               onClick={toggleChatbot}
             >
               <FaTimes />
             </Button>
           </div>
         </Card.Header>
-        
+
         <Card.Body className="chatbot-body">
           {messages.length === 0 ? (
             <div className="welcome-message">
@@ -121,8 +130,8 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
           ) : (
             <div className="messages-container">
               {messages.map((msg, index) => (
-                <div 
-                  key={index} 
+                <div
+                  key={index}
                   className={`message ${msg.sender === 'user' ? 'user-message' : 'bot-message'}`}
                 >
                   <div className="message-icon">
@@ -157,7 +166,7 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
             </div>
           )}
         </Card.Body>
-        
+
         <Card.Footer className="chatbot-footer">
           <Form onSubmit={handleSubmit} className="chatbot-form">
             <Form.Control
@@ -167,9 +176,11 @@ const Chatbot = ({ isOpen, toggleChatbot }) => {
               onChange={(e) => setInput(e.target.value)}
               disabled={isLoading}
               className="chatbot-input"
+              ref={inputRef}
+              autoFocus
             />
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="send-button"
               disabled={isLoading || !input.trim()}
             >

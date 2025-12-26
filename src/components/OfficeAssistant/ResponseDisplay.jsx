@@ -75,7 +75,7 @@ const ResponseDisplay = ({
         <div className="d-flex justify-content-between align-items-center mt-3 mb-3">
           <Button variant="outline-secondary" onClick={onReset}>
             <FaArrowLeft className="me-1" />
-            New {currentMode}
+            {currentMode}
           </Button>
           <div className="d-flex">
             <Button

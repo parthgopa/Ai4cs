@@ -6,7 +6,7 @@ import { ThemeContext } from './ThemeContext';
 import { IoHomeOutline, IoInformationCircleOutline, IoCallOutline, IoSettings, IoChevronDown, IoChevronForward } from 'react-icons/io5';
 import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs';
 import Chatbot from '../components/Chatbot';
-import { getToolsByCategory, enabledToolIds } from '../data/toolsData';
+import { getToolsByCategoryFromTools, enabledToolIdsFromTools } from '../components/Tools';
 
 const Header = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -16,7 +16,8 @@ const Header = () => {
   const [showToolsMenu, setShowToolsMenu] = useState(false);
   
   const toggleChatbot = () => setIsChatbotOpen(!isChatbotOpen);
-  const toolsByCategory = getToolsByCategory();
+  const toolsByCategory = getToolsByCategoryFromTools();
+  // console.log(toolsByCategory)
   
   const handleToolClick = (route) => {
     navigate(route);
@@ -132,7 +133,7 @@ const Header = () => {
                           <ul className="tools-list">
                             {tools.map(tool => {
                               const IconComponent = tool.icon;
-                              const isEnabled = enabledToolIds.has(tool.id);
+                              const isEnabled = enabledToolIdsFromTools.has(tool.id);
                               return (
                                 <li key={tool.id} className={!isEnabled ? 'disabled' : ''}>
                                   <button onClick={() => handleToolClick(tool.route)} className="tool-item">
@@ -164,7 +165,7 @@ const Header = () => {
                           <h6 className="mobile-category-title">{category}</h6>
                           {tools.map(tool => {
                             const IconComponent = tool.icon;
-                            const isEnabled = enabledToolIds.has(tool.id);
+                            const isEnabled = enabledToolIdsFromTools.has(tool.id);
                             return (
                               <div key={tool.id} className="mobile-tool-group">
                                 <button 

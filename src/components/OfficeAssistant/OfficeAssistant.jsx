@@ -11,14 +11,13 @@ const TOOLS = {
     description: "Create professional emails and draft thoughtful replies with AI assistance",
     route: "/office-assistant/email",
   },
-  // Future tools can be added here:
-  // letter: {
-  //   key: "letter",
-  //   label: "Letter Drafting",
-  //   icon: <FaFileAlt />,
-  //   description: "Draft formal and personal letters with proper formatting",
-  //   route: "/office-assistant/letter",
-  // },
+  letter: {
+    key: "letter",
+    label: "Letter Drafting",
+    icon: <FaFileAlt />,
+    description: "Draft formal and personal letters with proper formatting",
+    route: "/office-assistant/letter",
+  },
 };
 
 const OfficeAssistant = () => {
@@ -45,9 +44,9 @@ const OfficeAssistant = () => {
         {/* Tools Grid */}
         <div className="assistant-tools-grid">
           {Object.values(TOOLS).map((tool) => (
-            <div key={tool.key} className="tool-card-wrapper">
+            <div key={tool.key} className="tool-card-wrapper-office">
               <div
-                className="tool-card"
+                className="tool-card-office"
                 role="button"
                 tabIndex={0}
                 onClick={() => handleToolClick(tool)}
@@ -55,11 +54,10 @@ const OfficeAssistant = () => {
                   if (e.key === "Enter") handleToolClick(tool);
                 }}
               >
-                <div className="tool-icon">{tool.icon}</div>
-                <div className="tool-content">
-                  <h3 className="tool-title">{tool.label}</h3>
-                  <p className="tool-description">{tool.description}</p>
-                  <span className="tool-badge">Open Tool</span>
+                <div className="tool-icon-office">{tool.icon}</div>
+                <div className="tool-content-office">
+                  <h3 className="tool-title-office">{tool.label}</h3>
+                  <p className="tool-description-office">{tool.description}</p>
                 </div>
               </div>
             </div>

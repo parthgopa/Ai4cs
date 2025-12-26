@@ -170,7 +170,7 @@ Remove all introductory paragraph, end notes and any other non-relevant content.
 
   return (
     <div className="email-tool-page">
-      <div className="page-header">
+      {/* <div className="page-header">
         <button 
           className="back-button"
           onClick={() => navigate("/office-assistant")}
@@ -187,7 +187,7 @@ Remove all introductory paragraph, end notes and any other non-relevant content.
           </h1>
           <p className="page-description">Create and reply to professional emails</p>
         </div>
-      </div>
+      </div> */}
 
         {/* Mode Selection */}
       <div className="mode-selector">
@@ -224,11 +224,13 @@ Remove all introductory paragraph, end notes and any other non-relevant content.
       </div>
 
       {/* Content Area */}
-      <div className="form-section">
-        <div className="form-card">
-          {renderModeContent()}
+      {!response && (
+        <div className="form-section">
+          <div className="form-card">
+            {renderModeContent()}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

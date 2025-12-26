@@ -46,6 +46,7 @@ import ResolutionAssistant from "./components/ResolutionAssistant";
 import EmailDrafter from "./components/EmailDrafter";
 import OfficeAssistant from "./components/OfficeAssistant/OfficeAssistant";
 import EmailTool from "./components/OfficeAssistant/EmailTool";
+import LetterTool from "./components/OfficeAssistant/LetterTool";
 
 function App() {
   return (
@@ -159,6 +160,7 @@ function App() {
               <Route path="/email-drafter" element={<EmailDrafter />} />
               <Route path="/office-assistant" element={<OfficeAssistant />} />
               <Route path="/office-assistant/email" element={<EmailTool />} />
+              <Route path="/office-assistant/letter" element={<LetterTool />} />
 
             </Routes>
           </main>
