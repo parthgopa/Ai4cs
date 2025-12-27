@@ -45,8 +45,10 @@ import ResearchAssistant from "./components/ResearchAssistant";
 import ResolutionAssistant from "./components/ResolutionAssistant";
 import EmailDrafter from "./components/EmailDrafter";
 import OfficeAssistant from "./components/OfficeAssistant/OfficeAssistant";
-import EmailTool from "./components/OfficeAssistant/EmailTool";
-import LetterTool from "./components/OfficeAssistant/LetterTool";
+import EmailTool from "./components/OfficeAssistant/Email/EmailTool";
+import LetterTool from "./components/OfficeAssistant/Letter/LetterTool";
+import ReportTool from "./components/OfficeAssistant/Report/ReportTool";
+import BlogTool from "./components/OfficeAssistant/Blog/BlogTool";
 
 function App() {
   return (
@@ -161,6 +163,8 @@ function App() {
               <Route path="/office-assistant" element={<OfficeAssistant />} />
               <Route path="/office-assistant/email" element={<EmailTool />} />
               <Route path="/office-assistant/letter" element={<LetterTool />} />
+              <Route path="/office-assistant/report" element={<ReportTool />} />
+              <Route path="/office-assistant/blog" element={<BlogTool />} />
 
             </Routes>
           </main>

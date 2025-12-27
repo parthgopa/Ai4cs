@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaReply, FaSpinner, FaArrowLeft } from "react-icons/fa";
-import APIService from "../../Common/API";
+import APIService from "../../../Common/API";
 import NewEmail from "./NewEmail";
 import EmailReply from "./EmailReply";
-import ResponseDisplay from "./ResponseDisplay";
+import ResponseDisplay from "../ResponseDisplay";
 import "./EmailTool.css";
 
 const EmailTool = () => {
