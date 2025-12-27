@@ -172,13 +172,13 @@ const toolsFunctionalities = [
     icon: FaCalendarAlt,
     route: "/general-meeting-assistant"
   },
-  {
-    id: "email-drafter",
-    title: "Email Drafter",
-    category: "Utility",
-    icon: FaEnvelope,
-    route: "/email-drafter"
-  },
+  // {
+  //   id: "email-drafter",
+  //   title: "Email Drafter",
+  //   category: "Utility",
+  //   icon: FaEnvelope,
+  //   route: "/email-drafter"
+  // },
   {
     id: "resolution-assistant",
     title: "Resolution Assistant",
