@@ -1,8 +1,18 @@
 import axios from "axios";
+import { GoogleGenAI } from "@google/genai";
+
+
 
 const APIService = async ({ question, onResponse, retries = 2 }) => {
+  // console.log("starting ")
+  const API_KEY = "AIzaSyD6sGfj_endyqiQ11kuxMRH2oZPxktsLBo";
 
-    const API_KEY = "AIzaSyDW7UjW2SWxDHUNIGcRvG1sc1OGzo33lp8";
+
+  const ai = new GoogleGenAI({apiKey: "AIzaSyD6sGfj_endyqiQ11kuxMRH2oZPxktsLBo" });
+  
+  // console.log(ai)
+
+
 
 
   const makeRequest = async (attempt = 1) => {
@@ -18,6 +28,11 @@ const APIService = async ({ question, onResponse, retries = 2 }) => {
           "Content-Type": "application/json",
         },
       });
+
+      // const response = await ai.models.generateContent({
+      //   model: "gemini-2.5-flash",
+      //   contents: "Explain how AI works in a few words",
+      // });
 
       if (response.status === 200 && response.data) {
         onResponse(response.data);

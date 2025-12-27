@@ -158,7 +158,7 @@ Format the letter warmly and naturally. Remove all introductory paragraph, end n
       {/* Mode Selection */}
       <div className="mode-selector">
         <h3 className="mode-title">Choose Letter Type:</h3>
-        <div className="mode-buttons">
+        <div className="mode-buttons-letter">
           {modes.map((mode) => (
             <button
               key={mode.key}

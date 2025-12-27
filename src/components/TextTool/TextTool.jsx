@@ -1,5 +1,5 @@
 import React from "react";
-import "./OfficeAssistant.css";
+import "./TextTool.css";
 import { useNavigate } from "react-router-dom";
 import { FaEnvelope, FaFileAlt, FaChartBar, FaBlog } from "react-icons/fa";
 // Tool Registry - Simple and easy to extend
@@ -9,32 +9,32 @@ const TOOLS = {
     label: "Email Drafting",
     icon: <FaEnvelope />,
     description: "Create professional emails and draft thoughtful replies with AI assistance",
-    route: "/office-assistant/email",
+    route: "/text-tool/email",
   },
   letter: {
     key: "letter",
     label: "Letter Drafting",
     icon: <FaFileAlt />,
     description: "Draft formal and personal letters with proper formatting",
-    route: "/office-assistant/letter",
+    route: "/text-tool/letter",
   },
-  report: {
-    key: "report",
-    label: "Report Generation",
-    icon: <FaChartBar />,
-    description: "Generate comprehensive reports for various professional and academic purposes",
-    route: "/office-assistant/report",
-  },
-  blog: {
-    key: "blog",
-    label: "Blog Generation",
-    icon: <FaBlog />,
-    description: "Create engaging blogs for educational, business, technical, and marketing purposes",
-    route: "/office-assistant/blog",
-  },
+  // report: {
+  //   key: "report",
+  //   label: "Report Generation",
+  //   icon: <FaChartBar />,
+  //   description: "Generate comprehensive reports for various professional and academic purposes",
+  //   route: "/text-tool/report",
+  // },
+  // blog: {
+  //   key: "blog",
+  //   label: "Blog Generation",
+  //   icon: <FaBlog />,
+  //   description: "Create engaging blogs for educational, business, technical, and marketing purposes",
+  //   route: "/text-tool/blog",
+  // },
 };
 
-const OfficeAssistant = () => {
+const TextTool = () => {
   const navigate = useNavigate();
   const handleToolClick = (tool) => {
     // In your actual app: navigate(tool.route);
@@ -48,7 +48,7 @@ const OfficeAssistant = () => {
         <div className="assistant-header">
           <h1 className="assistant-title">
             <span className="title-icon"> <FaFileAlt /> </span>
-            Office Assistant
+            Text Tool
           </h1>
           <p className="assistant-description">
             Your intelligent document creation companion - craft professional communications with ease
@@ -91,4 +91,4 @@ const OfficeAssistant = () => {
   );
 };
 
-export default OfficeAssistant;
+export default TextTool;

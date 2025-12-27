@@ -114,7 +114,7 @@ function MarketingBlog({ onGenerate }) {
           name="blogTopic"
           value={formData.blogTopic}
           onChange={handleChange}
-          placeholder="e.g., Top AI Tools in 2025, Benefits of AI Office Assistants"
+          placeholder="e.g., Top AI Tools in 2025, Benefits of AI Text tool"
           className="form-control"
           required
         />
@@ -128,7 +128,7 @@ function MarketingBlog({ onGenerate }) {
           name="primaryKeyword"
           value={formData.primaryKeyword}
           onChange={handleChange}
-          placeholder="e.g., AI tools, office assistant, automation"
+          placeholder="e.g., AI tools, Text tool, automation"
           className="form-control"
           required
         />

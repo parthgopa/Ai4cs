@@ -172,13 +172,13 @@ const toolsFunctionalities = [
     icon: FaCalendarAlt,
     route: "/general-meeting-assistant"
   },
-  {
-    id: "email-drafter",
-    title: "Email Drafter",
-    category: "Utility",
-    icon: FaEnvelope,
-    route: "/email-drafter"
-  },
+  // {
+  //   id: "email-drafter",
+  //   title: "Email Drafter",
+  //   category: "Utility",
+  //   icon: FaEnvelope,
+  //   route: "/email-drafter"
+  // },
   {
     id: "resolution-assistant",
     title: "Resolution Assistant",
@@ -194,11 +194,11 @@ const toolsFunctionalities = [
     route: "/mini-law-library"
   },
   {
-    id: "office-assistant",
-    title: "Office Assistant",
+    id: "text-tool",
+    title: "Text Tool",
     category: "Utility",
     icon: FaBook,
-    route: "/office-assistant"
+    route: "/text-tool"
   }
 ];
 
@@ -229,7 +229,7 @@ const enabledToolIdsFromTools = new Set([
   "resolution-assistant",
   "email-drafter",
   "valuation-report",
-  "office-assistant"
+  "text-tool"
 ]);
 
 // Export functions for Header component
@@ -352,8 +352,8 @@ const Tools = () => {
       navigate("/email-drafter");
     } else if (id === "valuation-report") {
       navigate("/valuation-report");
-    } else if (id === "office-assistant") {
-      navigate("/office-assistant");
+    } else if (id === "text-tool") {
+      navigate("/text-tool");
     } else {
       openComingSoonModal(title);
     }

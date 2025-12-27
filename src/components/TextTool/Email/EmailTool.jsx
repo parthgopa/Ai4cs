@@ -54,7 +54,7 @@ Content Details/stats:
 - 
 - To:.
 - Subject: 
-- Contextимости 
+- Context:
 - 
 Output Preferences:
 - Language: ${data.language}
@@ -67,7 +67,7 @@ Output Preferences:
 Instructions:
 1. Auto-insert today's date (${currentDate}) at top-right of the email
 2. Show Subject line on top
-3. Write the body in short paragraphs (1–3 sentences each)
+3. Write the body in short paragraphs (1-3 sentences each)
 4. End with closing connotation + signatory
 5. Keep formatting clean and copy-paste ready (Note format)
 6. Use ${data.tone.toLowerCase()} tone throughout
@@ -192,7 +192,7 @@ Remove all introductory paragraph, end notes and any other non-relevant content.
         {/* Mode Selection */}
       <div className="mode-selector">
         <h3 className="mode-title">Choose Action:</h3>
-        <div className="mode-buttons">
+        <div className="mode-buttons-email">
           {modes.map((mode) => (
             <button
               key={mode.key}

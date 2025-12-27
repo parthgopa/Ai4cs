@@ -92,7 +92,7 @@
   margin: 0 0 1.5rem 0;
 }
 
-.email-tool-page .mode-buttons {
+.email-tool-page .mode-buttons-email {
   display: flex;
   gap: 1rem;
   flex-wrap: wrap;

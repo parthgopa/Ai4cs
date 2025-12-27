@@ -44,11 +44,11 @@ import JudgmentSimulator from "./components/JudgmentSimulator";
 import ResearchAssistant from "./components/ResearchAssistant";
 import ResolutionAssistant from "./components/ResolutionAssistant";
 import EmailDrafter from "./components/EmailDrafter";
-import OfficeAssistant from "./components/OfficeAssistant/OfficeAssistant";
-import EmailTool from "./components/OfficeAssistant/Email/EmailTool";
-import LetterTool from "./components/OfficeAssistant/Letter/LetterTool";
-import ReportTool from "./components/OfficeAssistant/Report/ReportTool";
-import BlogTool from "./components/OfficeAssistant/Blog/BlogTool";
+import TextTool from "./components/TextTool/TextTool";
+import EmailTool from "./components/TextTool/Email/EmailTool";
+import LetterTool from "./components/TextTool/Letter/LetterTool";
+import ReportTool from "./components/TextTool/Report/ReportTool";
+import BlogTool from "./components/TextTool/Blog/BlogTool";
 
 function App() {
   return (
@@ -160,11 +160,11 @@ function App() {
                 element={<ResolutionAssistant />}
               />
               <Route path="/email-drafter" element={<EmailDrafter />} />
-              <Route path="/office-assistant" element={<OfficeAssistant />} />
-              <Route path="/office-assistant/email" element={<EmailTool />} />
-              <Route path="/office-assistant/letter" element={<LetterTool />} />
-              <Route path="/office-assistant/report" element={<ReportTool />} />
-              <Route path="/office-assistant/blog" element={<BlogTool />} />
+              <Route path="/text-tool" element={<TextTool />} />
+              <Route path="/text-tool/email" element={<EmailTool />} />
+              <Route path="/text-tool/letter" element={<LetterTool />} />
+              <Route path="/text-tool/report" element={<ReportTool />} />
+              <Route path="/text-tool/blog" element={<BlogTool />} />
 
             </Routes>
           </main>
