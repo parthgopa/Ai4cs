@@ -247,6 +247,7 @@
   border-radius: 16px;
   padding: 2rem;
   box-shadow: var(--shadow-sm);
+  /* max-width: 100%; */
 }
 
 .email-tool-page .form-section-title {
@@ -256,6 +257,38 @@
   margin: 0 0 1.5rem 0;
   padding-bottom: 0.75rem;
   border-bottom: 2px solid var(--border-color);
+}
+
+.email-tool-page .form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.email-tool-page .btn-load-previous {
+  background: var(--accent-color);
+  border: 1px solid var(--border-color);
+  color: var(--primary-color);
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+}
+
+.email-tool-page .btn-load-previous:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(11, 94, 215, 0.3);
 }
 
 .email-tool-page .form-section-title:not(:first-child) {

@@ -1,7 +1,23 @@
 import React, { useState } from 'react';
-import { FaReply, FaFile, FaUpload, FaImage, FaFilePdf, FaFileWord, FaEye, FaCheck } from 'react-icons/fa';
+import { FaReply, FaFile, FaUpload, FaImage, FaFilePdf, FaFileWord, FaEye, FaCheck, FaHistory } from 'react-icons/fa';
 
 const EmailReply = ({ onGenerate }) => {
+  // Sample previous data for demonstration
+  const previousReplyData = {
+    to: "John Smith, Legal Counsel",
+    uploadMethod: "text",
+    originalEmail: "Dear Team,\n\nWe need to schedule a board meeting for next month to discuss the quarterly results and upcoming projects. Please provide your availability for the first week of next month.\n\nBest regards,\nSarah Johnson\nCEO",
+    subject: "Re: Board Meeting Schedule",
+    connotation: "Dear Sir",
+    replyMatter: "Confirm availability for board meeting and propose specific dates",
+    additionalMatter: "Request agenda items and prepare necessary documents",
+    tone: "Professional",
+    size: "Medium",
+    closing: "Best regards",
+    signature: "Jane Smith, Company Secretary",
+    language: "English",
+  };
+
   const [replyData, setReplyData] = useState({
     to: "",
     uploadMethod: "text",
@@ -249,9 +265,22 @@ const EmailReply = ({ onGenerate }) => {
     onGenerate('email-reply', replyData);
   };
 
+  const loadPreviousData = () => {
+    setReplyData(previousReplyData);
+  };
+
   return (
     <div className="form-card">
-      <h3 className="form-section-title">Reply to Email</h3>
+      <div className="form-header">
+        <h3 className="form-section-title">Reply to Email</h3>
+        <button 
+          className="btn-load-previous" 
+          onClick={loadPreviousData}
+          title="Load previous data"
+        >
+          <FaHistory />
+        </button>
+      </div>
       <div className="form-grid">
         {/* 1. To Field */}
         <div className="form-group">

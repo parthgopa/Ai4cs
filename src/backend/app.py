@@ -1,59 +1,50 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import requests
-import os
 from dotenv import load_dotenv
+
+# Import blueprints
+from api import api_bp
+from texttool import texttool_bp
 
 load_dotenv()
 
+# Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # allow frontend calls
 
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-print("Gemini API KEY :",GEMINI_API_KEY)
+# Register blueprints with proper URL prefixes
+app.register_blueprint(api_bp, url_prefix='/api')
+app.register_blueprint(texttool_bp, url_prefix='/texttool')
 
-@app.route("/generate", methods=["POST"])
-def generate():
-    try:
-        data = request.get_json()
-        question = data.get("question")
+# Legacy route for backward compatibility
+@app.route('/generate', methods=['POST', 'OPTIONS'])
+def legacy_generate():
+    """Legacy endpoint for backward compatibility"""
+    if request.method == 'OPTIONS':
+        # Handle CORS preflight request
+        response = jsonify({'status': 'success'})
+        response.headers.add('Access-Control-Allow-Origin', '*')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        return response
+    else:
+        from api import generate as api_generate
+        return api_generate()
 
-        if not question:
-            return jsonify({"error": "Question is required"}), 400
-
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
-
-        payload = {
-            "contents": [
-                {
-                    "parts": [{"text": question}]
-                }
-            ]
+@app.route('/')
+def home():
+    return jsonify({
+        "message": "AI4CS Backend API",
+        "endpoints": {
+            "general": "/api/generate",
+            "legacy": "/generate (deprecated)",
+            "texttool": {
+                "new_email": "/texttool/new-email",
+                "reply_email": "/texttool/reply-email"
+            }
         }
+    })
 
-        response = requests.post(
-            url,
-            json=payload,
-            headers={"Content-Type": "application/json"},
-            timeout=120
-        )
-
-        print(response)
-
-        if response.status_code != 200:
-            return jsonify({
-                "error": "Gemini API failed",
-                "details": response.text
-            }), response.status_code
-
-        return jsonify(response.json())
-
-    except requests.exceptions.Timeout:
-        return jsonify({"error": "Request timed out"}), 504
-
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
-
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
+# COMMENT OUT BELOW WHILE DEPLOYING TO BACKEND SERVER
+if __name__ == "__main__":
+    app.run(debug=True)

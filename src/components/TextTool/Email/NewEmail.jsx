@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
-import { FaEnvelope, FaArrowRight, FaArrowLeft, FaCheck } from 'react-icons/fa';
+import { FaEnvelope, FaArrowRight, FaArrowLeft, FaCheck, FaHistory } from 'react-icons/fa';
 
 const NewEmail = ({ onGenerate }) => {
+    // Sample previous data for demonstration
+    const previousData = {
+        signatory: "John Doe, Company Secretary",
+        subject: "Board Meeting Notice",
+        connotation: "Dear Sir",
+        inputDetails: "Notice for the upcoming board meeting to discuss quarterly results",
+        otherPoints: "Please bring all necessary documents",
+        tone: "Professional",
+        length: "Medium",
+        closingConnotation: "Best regards",
+        language: "English",
+        references: "No",
+    };
+
     const [formData, setFormData] = useState({
         signatory: "",
         subject: "",
@@ -12,6 +26,7 @@ const NewEmail = ({ onGenerate }) => {
         length: "",
         closingConnotation: "",
         language: "",
+        references: "No",
     });
 
     const formFields = [
@@ -114,6 +129,15 @@ const NewEmail = ({ onGenerate }) => {
                 { value: "Gujarati", label: "Gujarati" },
             ],
         },
+        {
+            field: "references",
+            label: "Include References/Case Law",
+            type: "select",
+            options: [
+                { value: "No", label: "No" },
+                { value: "Yes", label: "Yes" },
+            ],
+        },
     ];
 
     const handleInputChange = (e) => {
@@ -132,9 +156,22 @@ const NewEmail = ({ onGenerate }) => {
         onGenerate('new-email', formData);
     };
 
+    const loadPreviousData = () => {
+        setFormData(previousData);
+    };
+
     return (
         <div className="form-card">
-            <h3 className="form-section-title">New Email</h3>
+            <div className="form-header">
+                <h3 className="form-section-title">New Email</h3>
+                <button 
+                    className="btn-load-previous" 
+                    onClick={loadPreviousData}
+                    title="Load previous data"
+                >
+                    <FaHistory />
+                </button>
+            </div>
 
             <div className="form-grid">
                 {formFields.map((field, index) => (
@@ -196,6 +233,7 @@ const NewEmail = ({ onGenerate }) => {
                     length: "",
                     closingConnotation: "",
                     language: "",
+                    references: "No",
                 })}>
                     Reset Form
                 </button>

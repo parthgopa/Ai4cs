@@ -23,7 +23,7 @@ const AIDisclaimer = ({
       variant={variant} 
       className={`ai-disclaimer ${className}`}
     >
-      {showIcon && <FaRobot className="ai-disclaimer-icon" />}
+      {/* {showIcon && <FaRobot className="ai-disclaimer-icon" />} */}
       <FaInfoCircle className="ai-info-icon" />
       <span className="ai-disclaimer-text">{message}</span>
     </Alert>

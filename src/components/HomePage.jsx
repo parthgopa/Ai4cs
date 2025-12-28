@@ -3,6 +3,11 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../styles/HomePage.css';
 
+export const backend_URL = "http://127.0.0.1:5000";
+// export const backend_URL = "https://ai4cs.in";
+
+
+
 const HomePage = () => {
   const navigate = useNavigate();
   
@@ -10,9 +15,6 @@ const HomePage = () => {
   const navigateToTools = () => {
     navigate('/tools');
   };
-  
-
-  
 
   return (
     <main className="home-page">
