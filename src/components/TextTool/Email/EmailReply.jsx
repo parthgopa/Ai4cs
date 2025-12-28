@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaReply, FaFile, FaUpload, FaImage, FaFilePdf, FaFileWord, FaEye, FaCheck, FaHistory } from 'react-icons/fa';
+import { FaReply, FaFile, FaUpload, FaImage, FaFilePdf, FaFileWord, FaEye, FaCheck, FaHistory, FaDatabase } from 'react-icons/fa';
 
 const EmailReply = ({ onGenerate }) => {
   // Sample previous data for demonstration
@@ -38,6 +38,12 @@ const EmailReply = ({ onGenerate }) => {
     progress: 0,
     status: "",
     error: null,
+  });
+
+  const [savedReplyData, setSavedReplyData] = useState(() => {
+    // Load saved data from localStorage on component mount
+    const saved = localStorage.getItem('emailReplySavedData');
+    return saved ? JSON.parse(saved) : null;
   });
 
   const connotationOptions = [
@@ -262,6 +268,11 @@ const EmailReply = ({ onGenerate }) => {
       alert("Please fill in all required fields before proceeding.");
       return;
     }
+    
+    // Automatically save the current data to localStorage when generating
+    setSavedReplyData({...replyData});
+    localStorage.setItem('emailReplySavedData', JSON.stringify(replyData));
+    
     onGenerate('email-reply', replyData);
   };
 
@@ -269,17 +280,40 @@ const EmailReply = ({ onGenerate }) => {
     setReplyData(previousReplyData);
   };
 
+  const loadSavedData = () => {
+    // Try to get fresh data from localStorage first
+    const freshSavedData = localStorage.getItem('emailReplySavedData');
+    if (freshSavedData) {
+      const parsedData = JSON.parse(freshSavedData);
+      setSavedReplyData(parsedData);
+      setReplyData(parsedData);
+    } else if (savedReplyData) {
+      setReplyData(savedReplyData);
+    } else {
+      alert("No saved data found. Generate an email reply first to save your data automatically.");
+    }
+  };
+
   return (
     <div className="form-card">
       <div className="form-header">
         <h3 className="form-section-title">Reply to Email</h3>
-        <button 
-          className="btn-load-previous" 
-          onClick={loadPreviousData}
-          title="Load previous data"
-        >
-          <FaHistory />
-        </button>
+        <div className="form-header-buttons">
+          <button 
+            className="btn-load-saved" 
+            onClick={loadSavedData}
+            title="Load your saved data"
+          >
+            <FaDatabase />
+          </button>
+          <button 
+            className="btn-load-previous" 
+            onClick={loadPreviousData}
+            title="Load sample data"
+          >
+            <FaHistory />
+          </button>
+        </div>
       </div>
       <div className="form-grid">
         {/* 1. To Field */}

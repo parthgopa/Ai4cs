@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { FaEnvelope, FaArrowRight, FaArrowLeft, FaCheck, FaHistory } from 'react-icons/fa';
+import { FaEnvelope, FaArrowRight, FaArrowLeft, FaCheck, FaHistory, FaSave, FaDatabase } from 'react-icons/fa';
 
 const NewEmail = ({ onGenerate }) => {
     // Sample previous data for demonstration
@@ -26,7 +26,12 @@ const NewEmail = ({ onGenerate }) => {
         length: "",
         closingConnotation: "",
         language: "",
-        references: "No",
+    });
+
+    const [savedData, setSavedData] = useState(() => {
+        // Load saved data from localStorage on component mount
+        const saved = localStorage.getItem('newEmailSavedData');
+        return saved ? JSON.parse(saved) : null;
     });
 
     const formFields = [
@@ -128,16 +133,7 @@ const NewEmail = ({ onGenerate }) => {
                 { value: "Hindi", label: "Hindi" },
                 { value: "Gujarati", label: "Gujarati" },
             ],
-        },
-        {
-            field: "references",
-            label: "Include References/Case Law",
-            type: "select",
-            options: [
-                { value: "No", label: "No" },
-                { value: "Yes", label: "Yes" },
-            ],
-        },
+        }
     ];
 
     const handleInputChange = (e) => {
@@ -153,6 +149,11 @@ const NewEmail = ({ onGenerate }) => {
             alert("Please fill in all required fields before proceeding.");
             return;
         }
+        
+        // Automatically save the current data to localStorage when generating
+        setSavedData({...formData});
+        localStorage.setItem('newEmailSavedData', JSON.stringify(formData));
+        
         onGenerate('new-email', formData);
     };
 
@@ -160,17 +161,40 @@ const NewEmail = ({ onGenerate }) => {
         setFormData(previousData);
     };
 
+    const loadSavedData = () => {
+        // Try to get fresh data from localStorage first
+        const freshSavedData = localStorage.getItem('newEmailSavedData');
+        if (freshSavedData) {
+            const parsedData = JSON.parse(freshSavedData);
+            setSavedData(parsedData);
+            setFormData(parsedData);
+        } else if (savedData) {
+            setFormData(savedData);
+        } else {
+            alert("No saved data found. Generate an email first to save your data automatically.");
+        }
+    };
+
     return (
         <div className="form-card">
             <div className="form-header">
                 <h3 className="form-section-title">New Email</h3>
-                <button 
-                    className="btn-load-previous" 
-                    onClick={loadPreviousData}
-                    title="Load previous data"
-                >
-                    <FaHistory />
-                </button>
+                <div className="form-header-buttons">
+                    <button 
+                        className="btn-load-saved" 
+                        onClick={loadSavedData}
+                        title="Load your saved data"
+                    >
+                        <FaDatabase />
+                    </button>
+                    <button 
+                        className="btn-load-previous" 
+                        onClick={loadPreviousData}
+                        title="Load sample data"
+                    >
+                        <FaHistory />
+                    </button>
+                </div>
             </div>
 
             <div className="form-grid">
@@ -233,7 +257,6 @@ const NewEmail = ({ onGenerate }) => {
                     length: "",
                     closingConnotation: "",
                     language: "",
-                    references: "No",
                 })}>
                     Reset Form
                 </button>
