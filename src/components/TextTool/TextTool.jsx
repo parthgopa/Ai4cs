@@ -11,20 +11,20 @@ const TOOLS = {
     description: "Create professional emails and draft thoughtful replies with AI assistance",
     route: "/text-tool/email",
   },
-  letter: {
-    key: "letter",
-    label: "Letter Drafting",
-    icon: <FaFileAlt />,
-    description: "Draft formal and personal letters with proper formatting",
-    route: "/text-tool/letter",
-  },
-  // report: {
-  //   key: "report",
-  //   label: "Report Generation",
-  //   icon: <FaChartBar />,
-  //   description: "Generate comprehensive reports for various professional and academic purposes",
-  //   route: "/text-tool/report",
+  // letter: {
+  //   key: "letter",
+  //   label: "Letter Drafting",
+  //   icon: <FaFileAlt />,
+  //   description: "Draft formal and personal letters with proper formatting",
+  //   route: "/text-tool/letter",
   // },
+  report: {
+    key: "report",
+    label: "Report Generation",
+    icon: <FaChartBar />,
+    description: "Generate comprehensive reports for various professional and academic purposes",
+    route: "/text-tool/report",
+  },
   // blog: {
   //   key: "blog",
   //   label: "Blog Generation",

@@ -1,7 +1,22 @@
 import React, { useState } from 'react';
-import { FaCogs, FaUser, FaBuilding, FaBullseye, FaTools, FaChartLine } from 'react-icons/fa';
+import { FaCogs, FaUser, FaBuilding, FaBullseye, FaTools, FaChartLine, FaHistory, FaDatabase } from 'react-icons/fa';
 
 const TechnicalReport = ({ onGenerate }) => {
+  // Sample dummy data for demonstration
+  const dummyData = {
+    reportTitle: "Performance Analysis of Machine Learning Models for Real-Time Image Classification",
+    authorName: "Dr. Sarah Johnson",
+    organization: "Tech Research Institute",
+    purpose: "This technical report evaluates the performance of various machine learning models for real-time image classification tasks, focusing on accuracy, speed, and resource utilization in production environments.",
+    technicalBackground: "Real-time image classification has become increasingly important in various applications including autonomous vehicles, medical imaging, and security systems. Recent advances in deep learning, particularly Convolutional Neural Networks (CNNs), have significantly improved classification accuracy. However, the challenge lies in balancing accuracy with computational efficiency for real-time processing requirements.",
+    toolsTechnologies: "• Programming Languages: Python, TensorFlow, PyTorch\n• Frameworks: OpenCV, Keras, Scikit-learn\n• Tools: Docker, Jenkins, Git, Jupyter Notebook\n• Hardware: NVIDIA Tesla V100 GPUs, Intel Xeon Processors\n• Datasets: ImageNet, COCO, Custom Dataset\n• Monitoring: Prometheus, Grafana",
+    methodology: "We employed a systematic methodology to evaluate five different CNN architectures: ResNet-50, MobileNet-V2, EfficientNet-B0, YOLOv5, and a custom lightweight model. Each model was trained on the ImageNet dataset and fine-tuned on our custom dataset. We measured inference time, memory usage, and accuracy across different hardware configurations. Statistical analysis was performed using ANOVA to determine significant differences between models.",
+    implementationDetails: "The implementation consisted of three main modules: data preprocessing pipeline, model training framework, and performance evaluation system. The data preprocessing module handles image augmentation, normalization, and batch generation. The training framework supports distributed training across multiple GPUs with automatic mixed precision. The evaluation system collects metrics including inference latency, throughput, memory footprint, and power consumption. All components are containerized using Docker for reproducibility.",
+    performanceEvaluation: "Results show that EfficientNet-B0 achieved the best balance with 92.3% accuracy and 15ms inference time on GPU. MobileNet-V2 showed excellent performance on edge devices with 85.7% accuracy and 8ms inference time. The custom lightweight model achieved 78.2% accuracy with only 3ms inference time, making it suitable for resource-constrained environments. GPU acceleration provided 10-15x speedup compared to CPU processing.",
+    limitations: "The study is limited to image classification tasks and may not generalize to other computer vision tasks. Hardware-specific optimizations were not extensively explored. The evaluation was conducted on a single dataset, which may introduce bias. Long-term reliability and robustness testing were not performed.",
+    conclusion: "The technical evaluation demonstrates that model selection should be based on specific application requirements. For high-accuracy applications, EfficientNet-B0 provides optimal performance. For edge devices, MobileNet-V2 offers the best compromise. The custom lightweight model is suitable for real-time applications with limited resources. Future work should explore model compression techniques and hardware-specific optimizations.",
+  };
+
   const [reportData, setReportData] = useState({
     reportTitle: "",
     authorName: "",
@@ -14,6 +29,12 @@ const TechnicalReport = ({ onGenerate }) => {
     performanceEvaluation: "",
     limitations: "",
     conclusion: "",
+  });
+
+  const [savedData, setSavedData] = useState(() => {
+    // Load saved data from localStorage on component mount
+    const saved = localStorage.getItem('technicalReportSavedData');
+    return saved ? JSON.parse(saved) : null;
   });
 
   const handleInputChange = (e) => {
@@ -29,12 +50,53 @@ const TechnicalReport = ({ onGenerate }) => {
       alert("Please fill in all required fields before proceeding.");
       return;
     }
+    
+    // Automatically save the current data to localStorage when generating
+    setSavedData({...reportData});
+    localStorage.setItem('technicalReportSavedData', JSON.stringify(reportData));
+    
     onGenerate('technical-report', reportData);
+  };
+
+  const loadDummyData = () => {
+    setReportData(dummyData);
+  };
+
+  const loadSavedData = () => {
+    // Try to get fresh data from localStorage first
+    const freshSavedData = localStorage.getItem('technicalReportSavedData');
+    if (freshSavedData) {
+      const parsedData = JSON.parse(freshSavedData);
+      setSavedData(parsedData);
+      setReportData(parsedData);
+    } else if (savedData) {
+      setReportData(savedData);
+    } else {
+      alert("No saved data found. Generate a report first to save your data automatically.");
+    }
   };
 
   return (
     <div className="form-card">
-      <h3 className="form-section-title">Technical Report</h3>
+      <div className="form-header">
+        <h3 className="form-section-title">Technical Report</h3>
+        <div className="form-header-buttons">
+          <button 
+            className="btn-load-saved" 
+            onClick={loadSavedData}
+            title="Load your saved data"
+          >
+            <FaDatabase />
+          </button>
+          <button 
+            className="btn-load-previous" 
+            onClick={loadDummyData}
+            title="Load sample data"
+          >
+            <FaHistory />
+          </button>
+        </div>
+      </div>
       <div className="form-grid">
         {/* 1. Report Title */}
         <div className="form-group">

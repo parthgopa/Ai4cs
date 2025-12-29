@@ -1,7 +1,24 @@
 import React, { useState } from 'react';
-import { FaGraduationCap, FaUser, FaBuilding, FaCalendarAlt, FaTools, FaLightbulb } from 'react-icons/fa';
+import { FaGraduationCap, FaUser, FaBuilding, FaCalendarAlt, FaTools, FaLightbulb, FaHistory, FaDatabase } from 'react-icons/fa';
 
 const InternshipReport = ({ onGenerate }) => {
+  // Sample dummy data for demonstration
+  const dummyData = {
+    studentName: "John Doe",
+    organizationName: "Tech Solutions Inc.",
+    internshipRole: "Software Developer Intern",
+    department: "Engineering Department",
+    duration: "3 months (June-August 2025)",
+    supervisorName: "Jane Smith, Senior Developer",
+    organizationOverview: "Tech Solutions Inc. is a leading software development company specializing in enterprise solutions and cloud-based applications. Founded in 2010, the company has grown to serve over 500 clients worldwide with innovative technology solutions.",
+    keyResponsibilities: "• Developed and maintained web applications using React and Node.js\n• Assisted in database design and optimization using MongoDB\n• Participated in daily stand-up meetings and sprint planning sessions\n• Conducted unit testing and debugging of software components\n• Collaborated with cross-functional teams on project delivery and documentation",
+    toolsTechnologies: "• Programming Languages: JavaScript, Python, HTML5, CSS3\n• Frameworks: React, Node.js, Express.js, Django\n• Tools: Git, JIRA, VS Code, Postman, Docker\n• Databases: MongoDB, MySQL, Redis\n• Cloud Platforms: AWS, Google Cloud Platform",
+    keyLearnings: "• Gained hands-on experience in full-stack web development\n• Learned industry best practices for code version control and team collaboration\n• Developed problem-solving skills through debugging and optimization tasks\n• Improved communication and teamwork skills in an agile development environment\n• Acquired knowledge of cloud deployment and DevOps practices",
+    challenges: "• Initial difficulty understanding complex codebase and architecture\n• Managing time effectively between multiple project tasks\n• Adapting to professional coding standards and review processes",
+    solutions: "• Proactively sought guidance from senior developers and team members\n• Implemented time management techniques and prioritized tasks based on deadlines\n• Regularly reviewed coding standards and participated in code review sessions to improve quality",
+    conclusion: "The internship at Tech Solutions Inc. provided invaluable industry experience and significantly enhanced my technical skills. Working on real-world projects helped bridge the gap between academic knowledge and practical application. This experience has solidified my career goals in software development and prepared me for future professional challenges.",
+  };
+
   const [reportData, setReportData] = useState({
     studentName: "",
     organizationName: "",
@@ -18,10 +35,26 @@ const InternshipReport = ({ onGenerate }) => {
     conclusion: "",
   });
 
+  const [savedData, setSavedData] = useState(() => {
+    // Load saved data from localStorage on component mount
+    const saved = localStorage.getItem('internshipReportSavedData');
+    return saved ? JSON.parse(saved) : null;
+  });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setReportData({ ...reportData, [name]: value });
   };
+
+  const handleKeyPress = (e) => {
+    console.log(e);
+    // if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'BUTTON') {
+    //   e.preventDefault();
+    //   handleGenerateReport();
+    // }
+  };
+
+
 
   const handleGenerateReport = () => {
     const requiredFields = ['studentName', 'organizationName', 'internshipRole', 'department', 'duration', 'supervisorName', 'organizationOverview', 'keyResponsibilities', 'toolsTechnologies', 'keyLearnings'];
@@ -31,12 +64,53 @@ const InternshipReport = ({ onGenerate }) => {
       alert("Please fill in all required fields before proceeding.");
       return;
     }
+    
+    // Automatically save the current data to localStorage when generating
+    setSavedData({...reportData});
+    localStorage.setItem('internshipReportSavedData', JSON.stringify(reportData));
+    
     onGenerate('internship-report', reportData);
+  };
+
+  const loadDummyData = () => {
+    setReportData(dummyData);
+  };
+
+  const loadSavedData = () => {
+    // Try to get fresh data from localStorage first
+    const freshSavedData = localStorage.getItem('internshipReportSavedData');
+    if (freshSavedData) {
+      const parsedData = JSON.parse(freshSavedData);
+      setSavedData(parsedData);
+      setReportData(parsedData);
+    } else if (savedData) {
+      setReportData(savedData);
+    } else {
+      alert("No saved data found. Generate a report first to save your data automatically.");
+    }
   };
 
   return (
     <div className="form-card">
-      <h3 className="form-section-title">Internship Report</h3>
+      <div className="form-header">
+        <h3 className="form-section-title">Internship Report</h3>
+        <div className="form-header-buttons">
+          <button 
+            className="btn-load-saved" 
+            onClick={loadSavedData}
+            title="Load your saved data"
+          >
+            <FaDatabase />
+          </button>
+          <button 
+            className="btn-load-previous" 
+            onClick={loadDummyData}
+            title="Load sample data"
+          >
+            <FaHistory />
+          </button>
+        </div>
+      </div>
       <div className="form-grid">
         {/* 1. Student Name */}
         <div className="form-group">
@@ -49,6 +123,7 @@ const InternshipReport = ({ onGenerate }) => {
             name="studentName"
             value={reportData.studentName}
             onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
             placeholder="Enter your full name"
             className="form-control"
             autoFocus
@@ -66,6 +141,7 @@ const InternshipReport = ({ onGenerate }) => {
             name="organizationName"
             value={reportData.organizationName}
             onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
             placeholder="Enter organization name"
             className="form-control"
           />
@@ -82,6 +158,7 @@ const InternshipReport = ({ onGenerate }) => {
             name="internshipRole"
             value={reportData.internshipRole}
             onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
             placeholder="e.g., Software Developer Intern, Marketing Intern"
             className="form-control"
           />
@@ -95,6 +172,7 @@ const InternshipReport = ({ onGenerate }) => {
             name="department"
             value={reportData.department}
             onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
             placeholder="e.g., Engineering Department, Marketing Team"
             className="form-control"
           />
@@ -111,6 +189,7 @@ const InternshipReport = ({ onGenerate }) => {
             name="duration"
             value={reportData.duration}
             onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
             placeholder="e.g., 3 months (June-August 2024), 6 weeks"
             className="form-control"
           />
@@ -124,6 +203,7 @@ const InternshipReport = ({ onGenerate }) => {
             name="supervisorName"
             value={reportData.supervisorName}
             onChange={handleInputChange}
+            onKeyPress={handleKeyPress}
             placeholder="Enter supervisor's name"
             className="form-control"
           />

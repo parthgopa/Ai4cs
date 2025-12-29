@@ -1,7 +1,24 @@
 import React, { useState } from 'react';
-import { FaProjectDiagram, FaUser, FaBuilding, FaCalendarAlt, FaBullseye, FaCogs, FaChartLine } from 'react-icons/fa';
+import { FaProjectDiagram, FaUser, FaBuilding, FaCalendarAlt, FaBullseye, FaCogs, FaChartLine, FaHistory, FaDatabase } from 'react-icons/fa';
 
 const ProjectReport = ({ onGenerate }) => {
+  // Sample dummy data for demonstration
+  const dummyData = {
+    projectTitle: "Smart Inventory Management System for Retail Operations",
+    studentTeamName: "Tech Innovators Team - Computer Science Department",
+    organization: "Retail Solutions Inc.",
+    duration: "6 months (January-June 2025)",
+    problemStatement: "Retail businesses face significant challenges in inventory management, including stock discrepancies, manual tracking errors, delayed reorder processes, and lack of real-time visibility. Current systems are often disconnected, leading to inefficient operations, lost sales opportunities, and increased carrying costs. Small to medium retailers particularly struggle with affordable, integrated inventory solutions.",
+    objectives: "• Develop a real-time inventory tracking system using IoT sensors\n• Implement automated reorder alerts based on predictive analytics\n• Create a user-friendly dashboard for inventory visualization\n• Reduce manual inventory management efforts by 80%\n• Achieve 99% inventory accuracy across all product categories\n• Integrate with existing POS systems for seamless operation",
+    proposedSolution: "The Smart Inventory Management System combines IoT technology, cloud computing, and machine learning to provide real-time inventory visibility. The system uses RFID tags and weight sensors on shelves to track product movement automatically. A cloud-based backend processes this data and provides insights through a web dashboard. Machine learning algorithms predict demand patterns and optimize reorder points. The solution includes mobile apps for store staff and automated reporting for management.",
+    technologiesUsed: "• Frontend: React.js, Material-UI, Chart.js\n• Backend: Node.js, Express.js, MongoDB\n• IoT: RFID readers, Weight sensors, ESP32 microcontrollers\n• Cloud: AWS EC2, S3, Lambda\n• ML: Python, TensorFlow, scikit-learn\n• Mobile: React Native\n• APIs: RESTful APIs, WebSocket for real-time updates\n• Tools: Git, Docker, Jenkins CI/CD",
+    systemArchitecture: "The system follows a microservices architecture with the following components: 1) Data Collection Layer - IoT sensors and RFID readers collect inventory data. 2) Processing Layer - Edge devices process raw data and transmit to cloud. 3) Cloud Backend - Microservices handle data storage, processing, and analytics. 4) Application Layer - Web dashboard and mobile apps provide user interfaces. 5) Integration Layer - APIs connect with external POS and supplier systems. The architecture supports horizontal scaling and fault tolerance.",
+    implementationDetails: "Phase 1 (Months 1-2): Requirements gathering, system design, and prototype development. Phase 2 (Months 3-4): Core functionality implementation including IoT integration, database setup, and basic dashboard. Phase 3 (Months 5-6): Advanced features, testing, deployment, and user training. The team used Agile methodology with two-week sprints. Regular stakeholder meetings ensured alignment with business requirements. Comprehensive testing included unit tests, integration tests, and user acceptance testing.",
+    resultsOutcomes: "• Achieved 98.5% inventory accuracy in pilot testing\n• Reduced manual inventory time from 4 hours to 30 minutes daily\n• Decreased stockouts by 75% through predictive reordering\n• Improved customer satisfaction scores by 25%\n• Estimated ROI of 180% over 2-year period\n• Successfully deployed in 3 pilot stores with positive feedback\n• Scalable architecture ready for expansion to 50+ locations",
+    futureEnhancements: "• Implement AI-powered demand forecasting for seasonal products\n• Add supplier integration for automated purchase orders\n• Develop mobile scanning app for manual inventory adjustments\n• Create analytics module for business intelligence\n• Implement blockchain for supply chain transparency\n• Add voice-activated inventory queries for staff\n• Develop customer-facing inventory availability API",
+    conclusion: "The Smart Inventory Management System successfully addresses the critical challenges faced by retail businesses in inventory management. By leveraging IoT technology and modern software architecture, the project delivers significant improvements in accuracy, efficiency, and cost reduction. The system demonstrates the potential for technology to transform traditional retail operations and provides a solid foundation for future enhancements. The project showcases successful collaboration between academic research and practical business applications.",
+  };
+
   const [reportData, setReportData] = useState({
     projectTitle: "",
     studentTeamName: "",
@@ -18,6 +35,12 @@ const ProjectReport = ({ onGenerate }) => {
     conclusion: "",
   });
 
+  const [savedData, setSavedData] = useState(() => {
+    // Load saved data from localStorage on component mount
+    const saved = localStorage.getItem('projectReportSavedData');
+    return saved ? JSON.parse(saved) : null;
+  });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setReportData({ ...reportData, [name]: value });
@@ -31,12 +54,53 @@ const ProjectReport = ({ onGenerate }) => {
       alert("Please fill in all required fields before proceeding.");
       return;
     }
+    
+    // Automatically save the current data to localStorage when generating
+    setSavedData({...reportData});
+    localStorage.setItem('projectReportSavedData', JSON.stringify(reportData));
+    
     onGenerate('project-report', reportData);
+  };
+
+  const loadDummyData = () => {
+    setReportData(dummyData);
+  };
+
+  const loadSavedData = () => {
+    // Try to get fresh data from localStorage first
+    const freshSavedData = localStorage.getItem('projectReportSavedData');
+    if (freshSavedData) {
+      const parsedData = JSON.parse(freshSavedData);
+      setSavedData(parsedData);
+      setReportData(parsedData);
+    } else if (savedData) {
+      setReportData(savedData);
+    } else {
+      alert("No saved data found. Generate a report first to save your data automatically.");
+    }
   };
 
   return (
     <div className="form-card">
-      <h3 className="form-section-title">Project Report</h3>
+      <div className="form-header">
+        <h3 className="form-section-title">Project Report</h3>
+        <div className="form-header-buttons">
+          <button 
+            className="btn-load-saved" 
+            onClick={loadSavedData}
+            title="Load your saved data"
+          >
+            <FaDatabase />
+          </button>
+          <button 
+            className="btn-load-previous" 
+            onClick={loadDummyData}
+            title="Load sample data"
+          >
+            <FaHistory />
+          </button>
+        </div>
+      </div>
       <div className="form-grid">
         {/* 1. Project Title */}
         <div className="form-group">

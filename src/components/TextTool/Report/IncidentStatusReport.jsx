@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
-import { FaExclamationTriangle, FaCalendarAlt, FaMapMarkerAlt, FaUser, FaClipboardList, FaChartLine, FaTools, FaShieldAlt } from 'react-icons/fa';
+import { FaExclamationTriangle, FaCalendarAlt, FaMapMarkerAlt, FaUser, FaClipboardList, FaChartLine, FaTools, FaShieldAlt, FaHistory, FaDatabase } from 'react-icons/fa';
 
 const IncidentStatusReport = ({ onGenerate }) => {
+  // Sample dummy data for demonstration
+  const dummyData = {
+    incidentTitle: "Critical Database Server Outage - Production Environment",
+    dateTime: "December 26, 2024, 2:30 PM IST",
+    locationSystem: "Primary Database Server Cluster, Data Center - Mumbai Region",
+    reportedBy: "System Administrator - Rajesh Kumar",
+    description: "The primary database server cluster experienced a complete outage at 2:30 PM IST, affecting all production applications. Initial investigation indicates hardware failure in the primary storage array. The incident was automatically detected by monitoring systems when database response times exceeded threshold limits. All redundant systems failed to take over due to configuration issues in the failover mechanism.",
+    impactAnalysis: "• 100% service disruption for all customer-facing applications\n• Estimated 15,000 affected users across multiple regions\n• Financial impact: Approximately $50,000 per hour in lost revenue\n• Customer service hotline experiencing 300% increase in call volume\n• SLA breach notifications triggered for 42 enterprise clients\n• Brand reputation impact due to extended downtime",
+    actionsTaken: "• Immediate emergency response team assembled at 2:35 PM\n• Failed storage hardware identified and isolated at 3:15 PM\n• Backup systems manually activated at 3:45 PM\n• Partial service restored for critical applications at 4:20 PM\n• Full service restoration achieved at 6:30 PM\n• Post-incident analysis initiated at 7:00 PM\n• Customer communications sent at regular intervals",
+    currentStatus: "SERVICES RESTORED - All systems are now operational with normal performance metrics. Monitoring systems show stable database response times within acceptable limits. The emergency response team has transitioned to normal operations mode. Continuous monitoring is in place to ensure system stability. Root cause analysis is in progress.",
+    futurePrevention: "• Implement automated failover testing procedures\n• Upgrade storage array hardware with redundant components\n• Review and update disaster recovery protocols\n• Conduct quarterly incident response drills\n• Implement predictive maintenance for critical hardware\n• Enhance monitoring and alerting systems\n• Establish secondary data center for geographic redundancy\n• Review and update SLA compensation procedures",
+  };
+
   const [reportData, setReportData] = useState({
     incidentTitle: "",
     dateTime: "",
@@ -12,6 +25,12 @@ const IncidentStatusReport = ({ onGenerate }) => {
     actionsTaken: "",
     currentStatus: "",
     futurePrevention: "",
+  });
+
+  const [savedData, setSavedData] = useState(() => {
+    // Load saved data from localStorage on component mount
+    const saved = localStorage.getItem('incidentStatusReportSavedData');
+    return saved ? JSON.parse(saved) : null;
   });
 
   const handleInputChange = (e) => {
@@ -27,12 +46,53 @@ const IncidentStatusReport = ({ onGenerate }) => {
       alert("Please fill in all required fields before proceeding.");
       return;
     }
+    
+    // Automatically save the current data to localStorage when generating
+    setSavedData({...reportData});
+    localStorage.setItem('incidentStatusReportSavedData', JSON.stringify(reportData));
+    
     onGenerate('incident-status-report', reportData);
+  };
+
+  const loadDummyData = () => {
+    setReportData(dummyData);
+  };
+
+  const loadSavedData = () => {
+    // Try to get fresh data from localStorage first
+    const freshSavedData = localStorage.getItem('incidentStatusReportSavedData');
+    if (freshSavedData) {
+      const parsedData = JSON.parse(freshSavedData);
+      setSavedData(parsedData);
+      setReportData(parsedData);
+    } else if (savedData) {
+      setReportData(savedData);
+    } else {
+      alert("No saved data found. Generate a report first to save your data automatically.");
+    }
   };
 
   return (
     <div className="form-card">
-      <h3 className="form-section-title">Incident / Status Report</h3>
+      <div className="form-header">
+        <h3 className="form-section-title">Incident / Status Report</h3>
+        <div className="form-header-buttons">
+          <button 
+            className="btn-load-saved" 
+            onClick={loadSavedData}
+            title="Load your saved data"
+          >
+            <FaDatabase />
+          </button>
+          <button 
+            className="btn-load-previous" 
+            onClick={loadDummyData}
+            title="Load sample data"
+          >
+            <FaHistory />
+          </button>
+        </div>
+      </div>
       <div className="form-grid">
         {/* 1. Incident Title */}
         <div className="form-group">

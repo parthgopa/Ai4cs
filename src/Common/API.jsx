@@ -121,6 +121,197 @@ export const TextToolAPI = {
     };
 
     await makeRequest();
+  },
+
+  // Report Generation APIs
+  internshipReport: async (data, onResponse, retries = 2) => {
+    const makeRequest = async (attempt = 1) => {
+      try {
+        const response = await axios({
+          url: backend_URL + "/texttool/internship-report",
+          method: "POST",
+          data,
+          timeout: 120000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 200 && response.data) {
+          onResponse(response.data);
+        }
+
+      } catch (error) {
+        console.error(`Attempt ${attempt} failed`, error);
+
+        if (error.code === "ECONNABORTED" && attempt <= retries) {
+          await new Promise(r => setTimeout(r, 2000));
+          return makeRequest(attempt + 1);
+        }
+
+        onResponse({
+          candidates: [{
+            content: {
+              parts: [{ text: "Server error. Please try again later." }]
+            }
+          }]
+        });
+      }
+    };
+
+    await makeRequest();
+  },
+
+  projectReport: async (data, onResponse, retries = 2) => {
+    const makeRequest = async (attempt = 1) => {
+      try {
+        const response = await axios({
+          url: backend_URL + "/texttool/project-report",
+          method: "POST",
+          data,
+          timeout: 120000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 200 && response.data) {
+          onResponse(response.data);
+        }
+
+      } catch (error) {
+        console.error(`Attempt ${attempt} failed`, error);
+
+        if (error.code === "ECONNABORTED" && attempt <= retries) {
+          await new Promise(r => setTimeout(r, 2000));
+          return makeRequest(attempt + 1);
+        }
+
+        onResponse({
+          candidates: [{
+            content: {
+              parts: [{ text: "Server error. Please try again later." }]
+            }
+          }]
+        });
+      }
+    };
+
+    await makeRequest();
+  },
+
+  technicalReport: async (data, onResponse, retries = 2) => {
+    const makeRequest = async (attempt = 1) => {
+      try {
+        const response = await axios({
+          url: backend_URL + "/texttool/technical-report",
+          method: "POST",
+          data,
+          timeout: 120000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 200 && response.data) {
+          onResponse(response.data);
+        }
+
+      } catch (error) {
+        console.error(`Attempt ${attempt} failed`, error);
+
+        if (error.code === "ECONNABORTED" && attempt <= retries) {
+          await new Promise(r => setTimeout(r, 2000));
+          return makeRequest(attempt + 1);
+        }
+
+        onResponse({
+          candidates: [{
+            content: {
+              parts: [{ text: "Server error. Please try again later." }]
+            }
+          }]
+        });
+      }
+    };
+
+    await makeRequest();
+  },
+
+  businessMarketReport: async (data, onResponse, retries = 2) => {
+    const makeRequest = async (attempt = 1) => {
+      try {
+        const response = await axios({
+          url: backend_URL + "/texttool/business-market-report",
+          method: "POST",
+          data,
+          timeout: 120000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 200 && response.data) {
+          onResponse(response.data);
+        }
+
+      } catch (error) {
+        console.error(`Attempt ${attempt} failed`, error);
+
+        if (error.code === "ECONNABORTED" && attempt <= retries) {
+          await new Promise(r => setTimeout(r, 2000));
+          return makeRequest(attempt + 1);
+        }
+
+        onResponse({
+          candidates: [{
+            content: {
+              parts: [{ text: "Server error. Please try again later." }]
+            }
+          }]
+        });
+      }
+    };
+
+    await makeRequest();
+  },
+
+  incidentStatusReport: async (data, onResponse, retries = 2) => {
+    const makeRequest = async (attempt = 1) => {
+      try {
+        const response = await axios({
+          url: backend_URL + "/texttool/incident-status-report",
+          method: "POST",
+          data,
+          timeout: 120000,
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.status === 200 && response.data) {
+          onResponse(response.data);
+        }
+
+      } catch (error) {
+        console.error(`Attempt ${attempt} failed`, error);
+
+        if (error.code === "ECONNABORTED" && attempt <= retries) {
+          await new Promise(r => setTimeout(r, 2000));
+          return makeRequest(attempt + 1);
+        }
+
+        onResponse({
+          candidates: [{
+            content: {
+              parts: [{ text: "Server error. Please try again later." }]
+            }
+          }]
+        });
+      }
+    };
+
+    await makeRequest();
   }
 };
 

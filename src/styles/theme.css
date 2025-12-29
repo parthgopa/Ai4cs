@@ -40,6 +40,7 @@
     --card-bg: #111827; /* gray-900 */
     --header-footer-bg: #0f172a; /* match body for seamless */
     --border-color: #334155; /* slate-700 */
+    --logo-border-color: #eff1f4; /* slate-700 */
 
     /* HomePage specific helpers (dark) */
     --hero-gradient-end: #0b1222; /* subtle darker end */

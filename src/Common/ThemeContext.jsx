@@ -7,11 +7,8 @@ export const ThemeContext = createContext();
 export const ThemeProvider = ({ children }) => {
   // Determine initial theme: saved preference or system preference
   const getInitialTheme = () => {
-    const stored = localStorage.getItem('theme');
+    const stored = localStorage.getItem('theme', 'light');
     if (stored) return stored;
-    if (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
-    }
     return 'light';
   };
   const [theme, setTheme] = useState(getInitialTheme);

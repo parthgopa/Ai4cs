@@ -117,6 +117,7 @@
   width: 40px;
   border-radius: 50%;
 }
+
 .logo {
   height: 60px;
   width: 60px;
@@ -124,7 +125,7 @@
   object-fit: cover;
   transition: transform 0.3s ease;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.15);
-  border: 2px solid var(--border-color);
+  border: 2px solid var(--logo-border-color);
   margin: 0;
 }
 
