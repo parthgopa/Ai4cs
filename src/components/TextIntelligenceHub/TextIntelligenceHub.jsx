@@ -47,18 +47,18 @@ const TextIntelligenceHub = () => {
       icon: <FaLanguage />,
       description: "Translate text to different languages"
     },
-    // { 
-    //   key: "actionpoints", 
-    //   label: "Action Points", 
-    //   icon: <FaTasks />,
-    //   description: "Extract actionable items from content"
-    // },
-    // { 
-    //   key: "internalnote", 
-    //   label: "Internal Note", 
-    //   icon: <FaStickyNote />,
-    //   description: "Create structured office notes for internal use"
-    // },
+    { 
+      key: "actionpoints", 
+      label: "Action Points", 
+      icon: <FaTasks />,
+      description: "Extract actionable items from content"
+    },
+    { 
+      key: "internalnote", 
+      label: "Internal Note", 
+      icon: <FaStickyNote />,
+      description: "Create structured office notes for internal use"
+    },
   ];
 
   const handleOperationChange = (newOperation) => {

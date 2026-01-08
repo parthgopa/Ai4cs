@@ -3,9 +3,9 @@ import { Container, Row, Col } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import '../styles/HomePage.css';
 
-export const backend_URL = "http://127.0.0.1:5000";
+// export const backend_URL = "http://127.0.0.1:5000";
 // export const backend_URL = "https://backend.ai4cs.in.up.railway.app";
-// export const backend_URL = "https://ai4cs-production.up.railway.app";
+export const backend_URL = "https://ai4cs-production.up.railway.app";
 
 const HomePage = () => {
   const navigate = useNavigate();
