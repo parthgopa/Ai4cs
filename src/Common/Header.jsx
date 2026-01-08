@@ -66,7 +66,7 @@ const Header = () => {
         </div>
         
         <div className="d-flex align-items-right">
-          <Button 
+          {/* <Button 
             onClick={toggleTheme} 
             variant={theme === 'dark' ? 'outline-light' : 'outline-dark'} 
             size="sm" 
@@ -84,7 +84,7 @@ const Header = () => {
                 <span className="theme-text">Dark</span>
               </>
             )}
-          </Button>
+          </Button> */}
           <Navbar.Toggle 
             aria-controls="main-offcanvas" 
             onClick={() => setShowMenu(true)}
@@ -206,7 +206,7 @@ const Header = () => {
               <Nav.Link as={Link} to="/contact" className="nav-link" onClick={() => setShowMenu(false)}> 
                 <IoCallOutline size={20} className='navbar-buttons'/> Contact Us
               </Nav.Link>
-              <Button
+              {/* <Button
                 variant="outline-secondary"
                 className="theme-toggle ms-lg-3 my-2 d-lg-none d-flex align-items-center"
                 onClick={() => {
@@ -217,7 +217,7 @@ const Header = () => {
                 title={theme === 'dark' ? 'Switch to Light theme' : 'Switch to Dark theme'}
               >
                 {theme === 'dark' ? <><BsFillSunFill size={18} className='theme-buttons'/>  Light</> : <><BsFillMoonFill size={18} className='theme-buttons'/>  Dark</>}
-              </Button>
+              </Button> */}
             </Nav>
           </Offcanvas.Body>
         </Navbar.Offcanvas>

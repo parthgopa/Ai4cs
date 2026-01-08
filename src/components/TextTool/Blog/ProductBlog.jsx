@@ -126,6 +126,8 @@ function ProductBlog({ onGenerate }) {
             className="form-control"
           >
             <option value="SaaS">SaaS</option>
+            <option value="PaaS">PaaS</option>
+            <option value="Web Application">Web Application</option>
             <option value="Mobile App">Mobile App</option>
             <option value="AI Tool">AI Tool</option>
           </select>

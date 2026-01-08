@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaFileAlt, FaPen, FaSpinner, FaArrowLeft } from "react-icons/fa";
-import APIService from "../../../Common/API";
+import { TextToolAPI } from "../../../Common/API";
 import FormalLetter from "./FormalLetter";
 import InformalLetter from "./InformalLetter";
 import ResponseDisplay from "../ResponseDisplay";
@@ -37,88 +37,19 @@ const LetterTool = () => {
     setResponse("");
     setCurrentFormData(data);
 
-    const currentDate = new Date().toLocaleDateString("en-IN", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
-
-    let prompt = "";
-
-    if (type === "formal-letter") {
-      prompt = `You are my Professional Letter Writing Assistant.
-
-Your task is to draft a formal letter based on the following inputs:
-
-Letter Details:
-- From: ${data.fromName}, ${data.fromAddress}
-- Date: ${currentDate}
-- To: ${data.toRecipient}
-- Subject: ${data.subject}
-- Opening Connotation: ${data.openingConnotation}
-- Main Matter: ${data.mainMatter}
-- Additional Matter: ${data.additionalMatter || "None"}
-- Closing Connotation: ${data.closingConnotation}
-- Tone: ${data.tone}
-- Length: ${data.length}
-- Language: ${data.language}
-
-Instructions:
-1. Format as a professional formal letter with proper structure
-2. Include sender's address at top-left
-3. Include date at top-right
-4. Include recipient's address after date
-5. Use proper salutation with ${data.openingConnotation}
-6. Write the body in clear, professional paragraphs
-7. Address main matter: ${data.mainMatter}
-8. ${data.additionalMatter ? `Include additional matter: ${data.additionalMatter}` : "No additional matter"}
-9. Use ${data.tone.toLowerCase()} tone throughout
-10. Make it ${data.length.toLowerCase()} in length
-11. End with ${data.closingConnotation} and signature
-12. Write in ${data.language}
-13. Ensure proper formatting with spacing and structure
-14. Make it ready for immediate use
-
-Format the letter professionally with proper spacing and structure. Remove all introductory paragraph, end notes and any other non-relevant content.`;
-    } 
-    
-    else if (type === "informal-letter") {
-      prompt = `You are my Personal Letter Writing Assistant.
-
-Letter Details:
-- To: ${data.toWhom}
-- Purpose: ${data.purpose}
-- Tone: ${data.tone}
-- Language: ${data.language || "English"}
-
-Instructions:
-1. Format as a warm, personal letter
-2. Include today's date: ${currentDate}
-3. Use friendly greeting appropriate for ${data.toWhom}
-4. Write naturally about the purpose: ${data.purpose}
-5. Use ${data.tone.toLowerCase()} tone throughout
-6. Keep it conversational and heartfelt
-7. Include appropriate personal closing
-8. Write in ${data.language || "English"}
-9. Make it feel genuine and personal
-10. Ensure proper letter structure with spacing
-
-Format the letter warmly and naturally. Remove all introductory paragraph, end notes and any other non-relevant content.`;
-    }
-
     try {
-      await APIService({
-        question: prompt,
-        onResponse: (data) => {
-          setLoading(false);
-          if (data.candidates[0].content.parts) {
-            setResponse(data.candidates[0].content.parts[0].text);
-          } else {
-            setResponse(
-              "Sorry, we couldn't generate the letter. Please try again."
-            );
-          }
-        },
+      await TextToolAPI.generateLetter({
+        letterType: type,
+        data: data
+      }, (response) => {
+        setLoading(false);
+        if (response.candidates && response.candidates[0].content.parts) {
+          setResponse(response.candidates[0].content.parts[0].text);
+        } else {
+          setResponse(
+            "Sorry, we couldn't generate the letter. Please try again."
+          );
+        }
       });
     } catch (error) {
       setLoading(false);

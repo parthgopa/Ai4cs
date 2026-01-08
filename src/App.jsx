@@ -49,6 +49,8 @@ import EmailTool from "./components/TextTool/Email/EmailTool";
 import LetterTool from "./components/TextTool/Letter/LetterTool";
 import ReportTool from "./components/TextTool/Report/ReportTool";
 import BlogTool from "./components/TextTool/Blog/BlogTool";
+import NoteTool from "./components/TextTool/Note/NoteTool";
+import TextIntelligenceHub from "./components/TextIntelligenceHub/TextIntelligenceHub";
 
 function App() {
   return (
@@ -165,6 +167,8 @@ function App() {
               <Route path="/text-tool/letter" element={<LetterTool />} />
               <Route path="/text-tool/report" element={<ReportTool />} />
               <Route path="/text-tool/blog" element={<BlogTool />} />
+              <Route path="/text-tool/note" element={<NoteTool />} />
+              <Route path="/text-tool/intelligence" element={<TextIntelligenceHub />} />
 
             </Routes>
           </main>

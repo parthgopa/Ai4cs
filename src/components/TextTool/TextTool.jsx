@@ -1,7 +1,7 @@
 import React from "react";
 import "./TextTool.css";
 import { useNavigate } from "react-router-dom";
-import { FaEnvelope, FaFileAlt, FaChartBar, FaBlog } from "react-icons/fa";
+import { FaEnvelope, FaFileAlt, FaChartBar, FaBlog, FaStickyNote, FaBrain } from "react-icons/fa";
 // Tool Registry - Simple and easy to extend
 const TOOLS = {
   email: {
@@ -18,20 +18,34 @@ const TOOLS = {
   //   description: "Draft formal and personal letters with proper formatting",
   //   route: "/text-tool/letter",
   // },
-  report: {
-    key: "report",
-    label: "Report Generation",
-    icon: <FaChartBar />,
-    description: "Generate comprehensive reports for various professional and academic purposes",
-    route: "/text-tool/report",
-  },
-  // blog: {
-  //   key: "blog",
-  //   label: "Blog Generation",
-  //   icon: <FaBlog />,
-  //   description: "Create engaging blogs for educational, business, technical, and marketing purposes",
-  //   route: "/text-tool/blog",
+  // report: {
+  //   key: "report",
+  //   label: "Report Generation",
+  //   icon: <FaChartBar />,
+  //   description: "Generate comprehensive reports for various professional and academic purposes",
+  //   route: "/text-tool/report",
   // },
+  blog: {
+    key: "blog",
+    label: "Blog Generation",
+    icon: <FaBlog />,
+    description: "Create engaging blogs for educational, business, technical, and marketing purposes",
+    route: "/text-tool/blog",
+  },
+  // note: {
+  //   key: "note",
+  //   label: "Note Generation",
+  //   icon: <FaStickyNote />,
+  //   description: "Create structured notes for meetings, tasks, records, and various professional purposes",
+  //   route: "/text-tool/note",
+  // },
+  intelligence: {
+    key: "intelligence",
+    label: "Text Intelligence Hub",
+    icon: <FaBrain />,
+    description: "Advanced text processing with summarization, translation, and intelligent analysis tools",
+    route: "/text-tool/intelligence",
+  },
 };
 
 const TextTool = () => {
