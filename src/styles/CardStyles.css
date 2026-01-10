@@ -176,3 +176,241 @@
 .dark-theme .card-corner-decoration {
   opacity: 0.3;
 }
+
+/* Template Section Styles for AgreementDrafting */
+.template-section {
+  margin-bottom: 2rem;
+}
+
+.template-card {
+  background: var(--card-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.template-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), #8b5cf6);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.template-card:hover::before {
+  opacity: 1;
+}
+
+.template-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-color);
+}
+
+.template-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+.template-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: linear-gradient(135deg, var(--accent-color), #e0e7ff);
+  border-radius: 14px;
+  color: var(--primary-color);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.template-card:hover .template-icon {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.template-content {
+  flex: 1;
+}
+
+.template-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.template-description {
+  font-size: 0.95rem;
+  color: var(--muted-color);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.template-action {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.btn-template-generate {
+  background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+  color: white;
+  border: none;
+  padding: 0.875rem 2rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.btn-template-generate:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(11, 94, 215, 0.4);
+  background: linear-gradient(135deg, #0b5ed7, #2563eb);
+}
+
+.btn-template-generate:disabled {
+  background: var(--border-color);
+  color: var(--muted-color);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-template-generate .spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Form Actions Styles */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.btn-generate {
+  background: linear-gradient(135deg, var(--primary-color), #3b82f6);
+  color: white;
+  padding: 0.875rem 2rem;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  flex: 1;
+  min-width: 200px;
+}
+
+.btn-generate:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(11, 94, 215, 0.4);
+  background: linear-gradient(135deg, #0b5ed7, #2563eb);
+}
+
+.btn-generate:disabled {
+  background: var(--border-color);
+  color: var(--muted-color);
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-generate .spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Dark Theme Adjustments for Template */
+.dark-theme .template-card {
+  background: var(--card-bg);
+  border-color: var(--border-color);
+}
+
+.dark-theme .template-icon {
+  background: linear-gradient(135deg, var(--accent-color), #1e293b);
+}
+
+.dark-theme .btn-template-generate:disabled {
+  background: #374151;
+  color: #9ca3af;
+}
+
+.dark-theme .btn-generate:disabled {
+  background: #374151;
+  color: #9ca3af;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .template-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .template-icon {
+    margin: 0 auto;
+  }
+  
+  .template-action {
+    align-items: center;
+  }
+  
+  .btn-template-generate,
+  .btn-generate {
+    width: 100%;
+    max-width: 300px;
+  }
+}
+
+/* Warning Card Styles */
+.warning-card {
+  border: 2px solid #dc3545 !important;
+  background: #fff5f5 !important;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.15) !important;
+}
+
+.dark-theme .warning-card {
+  background: #2d1b1b !important;
+  border-color: #dc3545 !important;
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3) !important;
+}
+
+.warning-card .markdown-content {
+  color: #721c24 !important;
+}
+
+.dark-theme .warning-card .markdown-content {
+  color: #f8d7da !important;
+}

@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 # Import blueprints
 from api import api_bp
 from texttool import texttool_bp
+from agreements import agreements_bp
 
 load_dotenv()
 
@@ -15,6 +16,7 @@ CORS(app)  # allow frontend calls
 # Register blueprints with proper URL prefixes
 app.register_blueprint(api_bp, url_prefix='/api')
 app.register_blueprint(texttool_bp, url_prefix='/texttool')
+app.register_blueprint(agreements_bp, url_prefix='/agreements')
 
 # Legacy route for backward compatibility
 @app.route('/generate', methods=['POST', 'OPTIONS'])
@@ -41,6 +43,10 @@ def home():
             "texttool": {
                 "new_email": "/texttool/new-email",
                 "reply_email": "/texttool/reply-email"
+            },
+            "agreements": {
+                "generate_template": "/agreements/generate-template",
+                "generate_agreement": "/agreements/generate-agreement"
             }
         }
     })

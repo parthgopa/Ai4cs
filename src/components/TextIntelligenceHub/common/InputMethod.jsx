@@ -7,11 +7,15 @@ const InputMethod = ({ onContentChange, onMethodChange }) => {
   const [inputMethod, setInputMethod] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
   const [pastedText, setPastedText] = useState("");
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
 
   const handleMethodSelect = (method) => {
     setInputMethod(method);
     setUploadedFile(null);
     setPastedText("");
+    setUploadProgress(0);
+    setIsUploading(false);
     onMethodChange(method);
     onContentChange("");
   };
@@ -20,28 +24,48 @@ const InputMethod = ({ onContentChange, onMethodChange }) => {
     const file = event.target.files[0];
     if (file) {
       setUploadedFile(file);
-      // For now, we'll simulate file reading
-      // In a real implementation, you'd use FileReader API or backend processing
+      setIsUploading(true);
+      setUploadProgress(0);
+      
+      // Simulate progress updates
+      const progressInterval = setInterval(() => {
+        setUploadProgress(prev => {
+          if (prev >= 90) {
+            clearInterval(progressInterval);
+            return 90;
+          }
+          return prev + 10;
+        });
+      }, 200);
+
       const formData = new FormData();
-    formData.append("file", file);
+      formData.append("file", file);
 
-    try {
-      // Note the URL matches your Blueprint prefix + route
-      const response = await fetch(`${backend_URL}/texttool/extract-text`, {
-        method: "POST",
-        body: formData,
-      });
+      try {
+        // Note the URL matches your Blueprint prefix + route
+        const response = await fetch(`${backend_URL}/texttool/extract-text`, {
+          method: "POST",
+          body: formData,
+        });
 
-      const data = await response.json();
-      if (data.extractedText) {
-        console.log("Extracted text:", data.extractedText);
-        onContentChange(data.extractedText);
-      } else {
-        alert(data.error || "Failed to extract text");
+        clearInterval(progressInterval);
+        setUploadProgress(100);
+
+        const data = await response.json();
+        if (data.extractedText) {
+          // console.log("Extracted text:", data.extractedText);
+          onContentChange(data.extractedText);
+        } else {
+          alert(data.error || "Failed to extract text");
+        }
+      } catch (error) {
+        clearInterval(progressInterval);
+        console.error("Error connecting to backend:", error);
+        alert("Error uploading file. Please try again.");
+      } finally {
+        setIsUploading(false);
+        setTimeout(() => setUploadProgress(0), 1000);
       }
-    } catch (error) {
-      console.error("Error connecting to backend:", error);
-    }
     }
   };
 
@@ -53,6 +77,8 @@ const InputMethod = ({ onContentChange, onMethodChange }) => {
 
   const removeFile = () => {
     setUploadedFile(null);
+    setUploadProgress(0);
+    setIsUploading(false);
     onContentChange("");
   };
 
@@ -142,6 +168,19 @@ const InputMethod = ({ onContentChange, onMethodChange }) => {
               >
                 <FaTimes />
               </button>
+              
+              {/* Progress Bar */}
+              {isUploading && (
+                <div className="upload-progress">
+                  <div className="progress-bar">
+                    <div 
+                      className="progress-fill" 
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <p className="progress-text">Uploading... {uploadProgress}%</p>
+                </div>
+              )}
             </div>
           )}
         </div>

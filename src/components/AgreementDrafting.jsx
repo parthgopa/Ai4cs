@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Card, Form, Container, Row, Col } from 'react-bootstrap';
+import { Card, Form, Container, Row, Col, Alert } from 'react-bootstrap';
 import ReactMarkdown from 'react-markdown';
-import APIService from '../Common/API';
-import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaSearch } from 'react-icons/fa';
+import { AgreementsAPI } from '../Common/API';
+import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaSearch, FaMagic } from 'react-icons/fa';
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
@@ -70,52 +70,47 @@ const AgreementDrafting = () => {
 
   const handleTemplateSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check if agreement type is selected
+    if (!formData.agreementType) {
+      // Scroll to template section
+      const templateSection = document.querySelector('.template-section');
+      if (templateSection) {
+        templateSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      
+      // Show warning message
+      setResponse('⚠️ **Please select an agreement type first before generating a template.**\n\nChoose an agreement type from the dropdown menu above, then click "Generate Template" again.');
+      setCurrentfeature('template-warning');
+      return;
+    }
+    
     setTemplateLoading(true);
     setResponse('');
     setCurrentfeature('agreement-template');
 
-    const prompt = `Generate a Professional Template for a "${formData.agreementType}" Agreement (Template Only)
-
-Prepare a dummy draft of a "${formData.agreementType}" agreement in a highly professional format, as would be prepared by a senior and experienced solicitor practicing under Indian laws. This template is for structural preview only and should include:
-
-A formal and sophisticated legal drafting style
-
-Compliance with Indian laws and best practices for such agreement types
-
-Clearly structured clauses, definitions, schedules (if any), and annexures
-
-Use of formal legal phrases and terminology suitable for High Court or Tribunal presentation
-
-Placeholder text for all variable elements (e.g., [Party Name], [Date], [Consideration Amount], [Governing Law], etc.)
-
-The title of the agreement should be: "${formData.agreementType} Agreement (Template)"
-
-Use a consistent format with numbered clauses, section headings, and indented sub-clauses.
-
-Ensure the template maintains clarity, authority, and readability, reflecting the standard expected from top-tier legal firms in India.
-
-
-⚖ This template should not contain actual party-specific information, but be ready for such data to be inserted.
-🖋 The style should reflect that of a learned senior solicitor of over 20 years' experience in corporate law practice.
- `;
-
     try {
-      await APIService({
-        question: prompt,
-        onResponse: (data) => {
-          setLoading(false);
-          if (data && data.candidates && data.candidates[0] && data.candidates[0].content) {
-            setResponse(data.candidates[0].content.parts[0].text);
-          } else {
-            setResponse('Sorry, we couldn\'t generate a response. Please try again.');
-          }
+      await AgreementsAPI.generateTemplate({
+        agreementType: formData.agreementType
+      }, (data) => {
+        setTemplateLoading(false);
+        if (data && data.candidates && data.candidates[0] && data.candidates[0].content) {
+          setResponse(data.candidates[0].content.parts[0].text);
+          // Scroll to output section after successful generation
+          setTimeout(() => {
+            const outputSection = document.querySelector('.output-card');
+            if (outputSection) {
+              outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }, 100);
+        } else {
+          setResponse('Sorry, we couldn\'t generate a response. Please try again.');
         }
       });
     } catch (error) {
       setTemplateLoading(false);
       setResponse('An error occurred while processing your request. Please try again.');
     }
-    setTemplateLoading(false);
   };
 
   const handleSubmit = async (e) => {
@@ -124,46 +119,13 @@ Ensure the template maintains clarity, authority, and readability, reflecting th
     setCurrentfeature('agreement-drafting');
     setResponse('');
 
-    const prompt = `Generate a legally binding "${formData.agreementType}" agreement under Indian laws.
-Based on the provided input variables, prepare a complete and professionally drafted agreement as would be prepared by a senior solicitor with over 20 years of corporate law experience.
-Follow the style, structure, and terminology used in Indian legal practice, ensuring compliance with applicable laws (such as the Indian Contract Act, Companies Act, etc.).
-The document must include:
-•	A formal title (e.g., “Shareholders Agreement”)
-•	Date of execution
-•	Parties’ legal identity and addresses
-•	Recitals / Background
-•	Detailed clauses covering rights, duties, obligations, representations, indemnity, termination, and dispute resolution
-•	Jurisdiction and governing law (India)
-•	Placeholders only where input is missing
-•	Use numbered headings, sub-clauses, and professional formatting
-⚖️ Ensure tone and language match that of documents submitted before Indian regulators, High Courts, or arbitral tribunals.
-
-Agreement Type: ${formData.agreementType}
-Date of Agreement: ${formData.dateOfAgreement}
-Party A Name: ${formData.partyAName}
-Party A Description: ${formData.partyADescription}
-Party A Address: ${formData.partyAAddress}
-Party B Name: ${formData.partyBName}
-Party B Description: ${formData.partyBDescription}
-Party B Address: ${formData.partyBAddress}
-Purpose: ${formData.purpose}
-Effective Date: ${formData.effectiveDate}
-Duration: ${formData.duration}
-Governing Law: ${formData.governingLaw}
-Special Clauses: ${formData.specialClauses}
-Signature Names: ${formData.signatureNames}`;
-
-
     try {
-      await APIService({
-        question: prompt,
-        onResponse: (data) => {
-          setLoading(false);
-          if (data && data.candidates && data.candidates[0] && data.candidates[0].content) {
-            setResponse(data.candidates[0].content.parts[0].text);
-          } else {
-            setResponse('Sorry, we couldn\'t generate a response. Please try again.');
-          }
+      await AgreementsAPI.generateAgreement(formData, (data) => {
+        setLoading(false);
+        if (data && data.candidates && data.candidates[0] && data.candidates[0].content) {
+          setResponse(data.candidates[0].content.parts[0].text);
+        } else {
+          setResponse('Sorry, we couldn\'t generate a response. Please try again.');
         }
       });
     } catch (error) {
@@ -185,7 +147,7 @@ Signature Names: ${formData.signatureNames}`;
     "Andaman and Nicobar Islands", "Chandigarh", "Dadra and Nagar Haveli and Daman and Diu",
     "Delhi", "Jammu and Kashmir", "Ladakh", "Lakshadweep", "Puducherry"
   ];
-  
+
 
   return (
     <Container>
@@ -193,6 +155,45 @@ Signature Names: ${formData.signatureNames}`;
         <Col md={10}>
           <Card className="input-card">
             <h2 className="card-title">Agreement Drafting</h2>
+
+            {/* Template Generation Section */}
+            <div className="template-section mb-4">
+              <div className="template-card">
+                <div className="template-header">
+                  <div className="template-icon">
+                    <FaMagic />
+                  </div>
+                  <div className="template-content">
+                    <h4 className="template-title">Start with a Template?</h4>
+                    <p className="template-description">
+                      Generate a professional {formData.agreementType || 'agreement'} template to understand the structure before creating your complete agreement.
+                    </p>
+                  </div>
+                </div>
+                <div className="template-action">
+                  <button 
+                    onClick={handleTemplateSubmit} 
+                    className="btn-template-generate" 
+                    disabled={templateLoading || !formData.agreementType}
+                  >
+                    {templateLoading ? (
+                      <>
+                        <FaSpinner className="spinner me-2" />
+                        Generating Template...
+                      </>
+                    ) : (
+                      <>
+                        <FaMagic className="me-2" />
+                        Generate Template
+                      </>
+                    )}
+                  </button>
+                  {!formData.agreementType && (
+                    <small className="text-muted d-block mt-2">Select an agreement type to enable template generation</small>
+                  )}
+                </div>
+              </div>
+            </div>
 
             <Form>
               {/* Agreement Type */}
@@ -407,33 +408,25 @@ Signature Names: ${formData.signatureNames}`;
                 />
               </Form.Group>
 
-              <button onClick={handleSubmit} className="btn btn-primary btn-block" disabled={loading}>
-                {loading ? (
-                  <>
-                    <FaSpinner className="spinner me-2" />
-                    Generating Agreement...
-                  </>
-                ) : (
-                  <>
-                    <FaSearch className="me-2" />
-                    Generate Agreement
-                  </>
-                )}
-              </button>
-
-              <button onClick={handleTemplateSubmit} className="btn btn-outline-secondary ms-2" disabled={loading}>
-                {templateLoading ? (
-                  <>
-                    <FaSpinner className="spinner me-2" />
-                    Generating Template...
-                  </>
-                ) : (
-                  <>
-                    <FaSearch className="me-2" />
-                    Generate Template
-                  </>
-                )}
-              </button>
+              <div className="form-actions">
+                <button 
+                  onClick={handleSubmit} 
+                  className="btn-generate" 
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <>
+                      <FaSpinner className="spinner me-2" />
+                      Generating Agreement...
+                    </>
+                  ) : (
+                    <>
+                      <FaSearch className="me-2" />
+                      Generate Agreement
+                    </>
+                  )}
+                </button>
+              </div>
 
 
             </Form>
@@ -444,58 +437,62 @@ Signature Names: ${formData.signatureNames}`;
       {response && (
         <Row className="justify-content-center">
           <Col md={10}>
+            {currentfeature === 'template-warning' && (
+              <h2 className="card-title" style={{ marginBottom: '20px', color: '#dc3545' }}>⚠️ Agreement Type Required</h2>
+            )}
             {currentfeature === 'agreement-template' && (
               <h2 className="card-title" style={{ marginBottom: '20px' }}>{formData.agreementType} Agreement Template</h2>
             )}
             {currentfeature === 'agreement-drafting' && (
               <h2 className="card-title" style={{ marginBottom: '20px' }}>{formData.agreementType} Agreement Draft</h2>
             )}
-            {/* <h2 className="card-title" style={{ marginBottom: '12px' }}>Between {formData.partyAName} and {formData.partyBName}</h2> */}
-            <Card className="output-card">
-              <div className="d-flex justify-content-end mb-3">
-                <button
-                  className="btn btn-outline-primary me-2"
-                  onClick={() => {
-                    navigator.clipboard.writeText(response);
-                    alert('Copied to clipboard!');
-                  }}
-                >
-                  <FaCopy className="me-1" />
-                  <span className="d-none d-sm-inline">Copy to Clipboard</span>
-                </button>
-                <button
-                  className="btn btn-outline-danger me-2"
-                  onClick={() => {
-                    const { generatePDF } = PDFGenerator({
-                      content: response,
-                      fileName: `${formData.agreementType.replace(/\s+/g, '-').toLowerCase()}-${formData.partyAName}-${formData.partyBName}.pdf`,
-                      title: `${formData.agreementType}`
-                    });
-                    generatePDF();
-                  }}
-                >
-                  <FaFilePdf className="me-1" />
-                  <span className="d-none d-sm-inline">Download PDF</span>
-                </button>
-                <button
-                  className="btn btn-outline-success"
-                  onClick={() => {
-                    const { generateWord } = WordGenerator({
-                      content: response,
-                      fileName: `${formData.agreementType.replace(/\s+/g, '-').toLowerCase()}-${formData.partyAName}-${formData.partyBName}.docx`,
-                      title: `${formData.agreementType}`
-                    });
-                    generateWord();
-                  }}
-                >
-                  <FaFileWord className="me-1" />
-                  <span className="d-none d-sm-inline">Download Word</span>
-                </button>
-              </div>
+            <Card className={`output-card ${currentfeature === 'template-warning' ? 'warning-card' : ''}`}>
+              {currentfeature !== 'template-warning' && (
+                <div className="d-flex justify-content-end mb-3">
+                  <button
+                    className="btn btn-outline-primary me-2"
+                    onClick={() => {
+                      navigator.clipboard.writeText(response);
+                      alert('Copied to clipboard!');
+                    }}
+                  >
+                    <FaCopy className="me-1" />
+                    <span className="d-none d-sm-inline">Copy to Clipboard</span>
+                  </button>
+                  <button
+                    className="btn btn-outline-danger me-2"
+                    onClick={() => {
+                      const { generatePDF } = PDFGenerator({
+                        content: response,
+                        fileName: `${formData.agreementType.replace(/\s+/g, '-').toLowerCase()}-${formData.partyAName}-${formData.partyBName}.pdf`,
+                        title: `${formData.agreementType}`
+                      });
+                      generatePDF();
+                    }}
+                  >
+                    <FaFilePdf className="me-1" />
+                    <span className="d-none d-sm-inline">Download PDF</span>
+                  </button>
+                  <button
+                    className="btn btn-outline-success"
+                    onClick={() => {
+                      const { generateWord } = WordGenerator({
+                        content: response,
+                        fileName: `${formData.agreementType.replace(/\s+/g, '-').toLowerCase()}-${formData.partyAName}-${formData.partyBName}.docx`,
+                        title: `${formData.agreementType}`
+                      });
+                      generateWord();
+                    }}
+                  >
+                    <FaFileWord className="me-1" />
+                    <span className="d-none d-sm-inline">Download Word</span>
+                  </button>
+                </div>
+              )}
               <div className="markdown-content">
                 <ReactMarkdown>{response}</ReactMarkdown>
               </div>
-              <AIDisclaimer variant="light" />
+              {currentfeature !== 'template-warning' && <AIDisclaimer variant="light" />}
             </Card>
           </Col>
         </Row>

@@ -95,6 +95,16 @@ const TextIntelligenceHub = () => {
     setCurrentFormData(null);
     setInputMethod("");
     setContent("");
+    // Don't reset currentOperation to stay in the current operation context
+  };
+
+  const handleBackToOperationSelection = () => {
+    setCurrentOperation("");
+    setResponse("");
+    setLoading(false);
+    setCurrentFormData(null);
+    setInputMethod("");
+    setContent("");
   };
 
   // Generation functions
@@ -128,6 +138,11 @@ const TextIntelligenceHub = () => {
 
   // Render content based on workflow state
   const renderContent = () => {
+    // If there's a response, don't show any input forms
+    if (response) {
+      return null;
+    }
+
     if (loading) {
       return (
         <div className="form-card">
@@ -217,7 +232,7 @@ const TextIntelligenceHub = () => {
           currentTool="text-intelligence"
           currentMode={currentOperation}
           formData={currentFormData}
-          onReset={resetForm}
+          onReset={response ? handleBackToOperationSelection : resetForm}
           title={`${currentOperation ? operations.find(op => op.key === currentOperation)?.label : ''} Result:`}
           subject={currentFormData?.subject || "Processed Content"}
         />
