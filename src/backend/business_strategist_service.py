@@ -1,4 +1,4 @@
-import google.genai as genai
+from google import genai
 import uuid
 import os
 from dotenv import load_dotenv
@@ -6,9 +6,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-genai.configure(api_key=GEMINI_API_KEY)
 
-model = genai.GenerativeModel("gemini-2.5-flash")
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 SESSIONS = {}
 
@@ -143,26 +142,31 @@ def create_session():
     session_id = str(uuid.uuid4())
     print(f"Generated Session ID: {session_id}")
 
-    chat = model.start_chat(history=[
-        {"role": "user", "parts": [SYSTEM_PROMPT]}
-    ])
+    chat_history = [
+        {"role": "user", "parts": [{"text": SYSTEM_PROMPT}]},
+        {"role": "model", "parts": [{"text": "I understand. I am ready to act as your AI-Powered Business Strategist."}]}
+    ]
 
     print(f"\n📋 System Prompt Initialized")
 
-    response = chat.send_message(
-        "Start the business strategy consultation by presenting the function selection question."
+    response = client.models.generate_content(
+        model="gemini-2.0-flash-exp",
+        contents=chat_history + [{"role": "user", "parts": [{"text": "Start the business strategy consultation by presenting the function selection question."}]}]
     )
 
     first_question = response.text.strip()
     print(f"\n🎤 First Question Generated:\n{first_question}")
 
+    chat_history.append({"role": "user", "parts": [{"text": "Start the business strategy consultation by presenting the function selection question."}]})
+    chat_history.append({"role": "model", "parts": [{"text": first_question}]})
+
     SESSIONS[session_id] = {
-        "chat": chat,
+        "chat_history": chat_history,
         "answers": [],
         "step": "function_selection"
     }
     
-    print(f"\n✅ Session stored with {len(chat.history)} messages in history")
+    print(f"\n✅ Session stored with {len(chat_history)} messages in history")
     print("="*50 + "\n")
 
     return session_id, first_question
@@ -181,7 +185,8 @@ def next_question(session_id, answer):
     session = SESSIONS[session_id]
     session["answers"].append(answer)
     
-    print(f"\n📚 Full Chat History ({len(session['chat'].history)} messages)")
+    chat_history = session["chat_history"]
+    print(f"\n📚 Full Chat History ({len(chat_history)} messages)")
 
     prompt = f"""
 User's answer:
@@ -200,12 +205,20 @@ Do not give feedback on the answer unless providing final advisory.
 """
     
     print(f"\n📝 Sending prompt to AI with user's answer...")
-    response = session["chat"].send_message(prompt)
+    
+    chat_history.append({"role": "user", "parts": [{"text": prompt}]})
+    
+    response = client.models.generate_content(
+        model="gemini-2.0-flash-exp",
+        contents=chat_history
+    )
 
     next_q = response.text.strip()
     print(f"\n🎤 Next Response Generated:\n{next_q[:200]}...")
     
-    print(f"\n📊 Updated Chat History ({len(session['chat'].history)} messages)")
+    chat_history.append({"role": "model", "parts": [{"text": next_q}]})
+    
+    print(f"\n📊 Updated Chat History ({len(chat_history)} messages)")
     print("="*50 + "\n")
     
     return next_q

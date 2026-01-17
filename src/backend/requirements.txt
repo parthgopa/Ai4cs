@@ -5,5 +5,4 @@ requests
 gunicorn
 PyMuPDF
 python-docx
-google.genai
-uuid
+google-genai
