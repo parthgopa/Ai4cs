@@ -51,6 +51,7 @@ import ReportTool from "./components/TextTool/Report/ReportTool";
 import BlogTool from "./components/TextTool/Blog/BlogTool";
 import NoteTool from "./components/TextTool/Note/NoteTool";
 import TextIntelligenceHub from "./components/TextIntelligenceHub/TextIntelligenceHub";
+import BusinessStrategist from "./components/BusinessStrategist";
 
 function App() {
   return (
@@ -169,6 +170,7 @@ function App() {
               <Route path="/text-tool/blog" element={<BlogTool />} />
               <Route path="/text-tool/note" element={<NoteTool />} />
               <Route path="/text-tool/intelligence" element={<TextIntelligenceHub />} />
+              <Route path="/business-strategist" element={<BusinessStrategist />} />
 
             </Routes>
           </main>

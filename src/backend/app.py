@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from api import api_bp
 from texttool import texttool_bp
 from agreements import agreements_bp
+from business_strategist import business_strategist_bp
 
 load_dotenv()
 
@@ -17,6 +18,7 @@ CORS(app)  # allow frontend calls
 app.register_blueprint(api_bp, url_prefix='/api')
 app.register_blueprint(texttool_bp, url_prefix='/texttool')
 app.register_blueprint(agreements_bp, url_prefix='/agreements')
+app.register_blueprint(business_strategist_bp, url_prefix='/business-strategist')
 
 # Legacy route for backward compatibility
 @app.route('/generate', methods=['POST', 'OPTIONS'])
@@ -47,6 +49,9 @@ def home():
             "agreements": {
                 "generate_template": "/agreements/generate-template",
                 "generate_agreement": "/agreements/generate-agreement"
+            },
+            "business_strategist": {
+                "consultation": "/business-strategist/consultation (type: 'start' or 'next')"
             }
         }
     })

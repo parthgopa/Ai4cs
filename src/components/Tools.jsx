@@ -14,6 +14,7 @@ import {
   FaSearch,
   FaEnvelope,
   FaFileInvoice,
+  FaBriefcase,
 } from "react-icons/fa";
 import {
   MdUpdate,
@@ -25,6 +26,13 @@ import ComingSoonModal from "./ComingSoonModal";
 
 // Tools data - moved outside component for sharing
 const toolsFunctionalities = [
+    {
+    id: "business-strategist",
+    title: "Business Strategist",
+    category: "Strategy",
+    icon: FaBriefcase,
+    route: "/business-strategist"
+  },
   {
     id: "compliance-calendar",
     title: "Compliance Calendar",
@@ -199,7 +207,8 @@ const toolsFunctionalities = [
     category: "Utility",
     icon: FaBook,
     route: "/text-tool"
-  }
+  },
+
 ];
 
 // Enabled tool IDs
@@ -229,7 +238,8 @@ const enabledToolIdsFromTools = new Set([
   "resolution-assistant",
   "email-drafter",
   "valuation-report",
-  "text-tool"
+  "text-tool",
+  "business-strategist"
 ]);
 
 // Export functions for Header component
@@ -354,6 +364,8 @@ const Tools = () => {
       navigate("/valuation-report");
     } else if (id === "text-tool") {
       navigate("/text-tool");
+    } else if (id === "business-strategist") {
+      navigate("/business-strategist");
     } else {
       openComingSoonModal(title);
     }
