@@ -6,8 +6,13 @@ from business_strategist_service import (
 
 business_strategist_bp = Blueprint("business_strategist", __name__)
 
-@business_strategist_bp.route("/consultation", methods=["POST"])
+@business_strategist_bp.route("/consultation", methods=["POST", "OPTIONS"])
 def consultation():
+
+    # ✅ Handle preflight FIRST
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+    
     try:
         data = request.json
         consultation_type = data.get("type")

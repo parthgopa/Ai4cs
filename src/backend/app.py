@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Configure CORS to allow specific origins
-CORS(app, resources={r"/*": {"origins": ["*", "http://localhost:5173", "https://ai4cs-production.up.railway.app", "https://ai4cs.in"]}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "https://ai4cs.in"]}})
 
 # Register blueprints with proper URL prefixes
 app.register_blueprint(api_bp, url_prefix='/api')
@@ -40,22 +40,7 @@ def legacy_generate():
 @app.route('/')
 def home():
     return jsonify({
-        "message": "AI4CS Backend API",
-        "endpoints": {
-            "general": "/api/generate",
-            "legacy": "/generate (deprecated)",
-            "texttool": {
-                "new_email": "/texttool/new-email",
-                "reply_email": "/texttool/reply-email"
-            },
-            "agreements": {
-                "generate_template": "/agreements/generate-template",
-                "generate_agreement": "/agreements/generate-agreement"
-            },
-            "business_strategist": {
-                "consultation": "/business-strategist/consultation (type: 'start' or 'next')"
-            }
-        }
+        "message": "AI4CS Backend API"
     })
 
 # COMMENT OUT BELOW WHILE DEPLOYING TO BACKEND SERVER
