@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 import os
 from dotenv import load_dotenv
-import google.generativeai as genai
+from google import genai
 
 load_dotenv()
 
@@ -11,13 +11,12 @@ api_bp = Blueprint('api', __name__)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 print("Gemini API KEY :", GEMINI_API_KEY)
 
-genai.configure(api_key=GEMINI_API_KEY)
-model = genai.GenerativeModel("gemini-2.5-flash")
+client = genai.Client(api_key=GEMINI_API_KEY)
 
 @api_bp.route("/generate", methods=["POST", "OPTIONS"])
 def generate():
 
-    # ✅ Handle preflight FIRST
+    # Handle preflight FIRST
     if request.method == "OPTIONS":
         return jsonify({"status": "ok"}), 200
 
@@ -30,14 +29,11 @@ def generate():
         if not question:
             return jsonify({"error": "Question is required"}), 400
 
-        response = model.generate_content(
-            question,
-            generation_config=genai.types.GenerationConfig(
-                max_output_tokens=2048,
-                temperature=0.7
-            )
+        response = client.models.generate_content(
+            model="gemini-3-flash-preview",
+            contents=[{"role": "user", "parts": [{"text": question}]}]
         )
-
+        print(response.text)
         if not response or not response.text:
             return jsonify({
                 "error": "Gemini API failed",

@@ -18,6 +18,7 @@ const APIService = async ({ question, onResponse, retries = 2 }) => {
         },
       });
 
+      console.log(response)
 
       if (response.status === 200 && response.data) {
         // console.log(response)
