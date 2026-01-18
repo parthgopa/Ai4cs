@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
-import requests
 import os
 from dotenv import load_dotenv
+import google.generativeai as genai
 
 load_dotenv()
 
@@ -10,6 +10,9 @@ api_bp = Blueprint('api', __name__)
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 print("Gemini API KEY :", GEMINI_API_KEY)
+
+genai.configure(api_key=GEMINI_API_KEY)
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 @api_bp.route("/generate", methods=["POST"])
 def generate():
@@ -20,39 +23,24 @@ def generate():
         if not question:
             return jsonify({"error": "Question is required"}), 400
 
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+        response = model.generate_content(question, generation_config=genai.types.GenerationConfig(
+            max_output_tokens=2048,
+            temperature=0.7
+        ))
 
-        payload = {
-            "contents": [
-                {
-                    "parts": [{"text": question}]
-                }
-            ],
-            "generationConfig": {
-                "maxOutputTokens": 2048,
-                "temperature": 0.7
-            }
-        }
-
-        response = requests.post(
-            url,
-            json=payload,
-            headers={"Content-Type": "application/json"},
-            timeout=120
-        )
-
-        print(response)
-
-        if response.status_code != 200:
+        if not response.text:
             return jsonify({
                 "error": "Gemini API failed",
-                "details": response.text
-            }), response.status_code
+                "details": "No content returned"
+            }), 500
 
-        return jsonify(response.json())
-
-    except requests.exceptions.Timeout:
-        return jsonify({"error": "Request timed out"}), 504
+        return jsonify({
+            "candidates": [{
+                "content": {
+                    "parts": [{"text": response.text}]
+                }
+            }]
+        })
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500

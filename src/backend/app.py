@@ -12,7 +12,9 @@ load_dotenv()
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)  # allow frontend calls
+
+# Configure CORS to allow specific origins
+CORS(app, resources={r"/*": {"origins": ["*", "http://localhost:5173", "https://ai4cs-production.up.railway.app", "https://ai4cs.in"]}})
 
 # Register blueprints with proper URL prefixes
 app.register_blueprint(api_bp, url_prefix='/api')
