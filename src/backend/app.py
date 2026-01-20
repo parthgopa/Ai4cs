@@ -14,7 +14,7 @@ load_dotenv()
 app = Flask(__name__)
 
 # Configure CORS to allow specific origins
-CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "https://ai4cs.in"]}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "https://ai4cs.in", "https://ai.onewebmart.com"]}})
 
 # Register blueprints with proper URL prefixes
 app.register_blueprint(api_bp, url_prefix='/api')
