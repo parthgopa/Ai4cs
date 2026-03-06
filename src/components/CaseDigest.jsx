@@ -7,6 +7,7 @@ import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaSearch, FaGavel } from 'rea
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
+import { LEGAL_COMPLIANCE_PROMPT } from '../constants/legalPrompt';
 
 const CaseDigest = () => {
   const [formData, setFormData] = useState({
@@ -45,7 +46,9 @@ const CaseDigest = () => {
     setLoading(true);
     setResponse('');
 
-    const prompt = `You are "CaseDigest" — a professional Corporate Case Law Summarizer for Company Secretaries, lawyers and compliance officers. Produce concise, precedent-driven digests focused on corporate/commercial law (Companies Act, SEBI, Insolvency, Contract, Tax). 
+    const prompt = `${LEGAL_COMPLIANCE_PROMPT}
+
+You are "CaseDigest" — a professional Corporate Case Law Summarizer for Company Secretaries, lawyers and compliance officers. Produce concise, precedent-driven digests focused on corporate/commercial law (Companies Act, SEBI, Insolvency, Contract, Tax). 
 
 USER INPUT: 
 - CASE_INPUT: ${formData.caseInput}

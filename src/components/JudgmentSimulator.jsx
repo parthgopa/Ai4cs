@@ -7,6 +7,7 @@ import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaSearch, FaGavel } from 'rea
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
+import { LEGAL_COMPLIANCE_PROMPT } from '../constants/legalPrompt';
 
 const JudgmentSimulator = () => {
   const [formData, setFormData] = useState({
@@ -32,7 +33,9 @@ const JudgmentSimulator = () => {
     setLoading(true);
     setResponse('');
 
-    const prompt = `You are 'SimuLaw' — a concise, professional Legal Judgment Simulation assistant for corporate/commercial law (Companies Act, SEBI, Insolvency, Contracts). Focused on Company Secretaries, lawyers and compliance professionals.
+    const prompt = `${LEGAL_COMPLIANCE_PROMPT}
+
+You are 'SimuLaw' — a concise, professional Legal Judgment Simulation assistant for corporate/commercial law (Companies Act, SEBI, Insolvency, Contracts). Focused on Company Secretaries, lawyers and compliance professionals.
 
 USER INPUT:
 - CASE: ${formData.caseDetails}

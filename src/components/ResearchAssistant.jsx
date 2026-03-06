@@ -7,6 +7,7 @@ import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaSearch, FaArrowRight, FaArr
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
+import { LEGAL_COMPLIANCE_PROMPT } from '../constants/legalPrompt';
 
 const ResearchAssistant = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -98,7 +99,7 @@ const ResearchAssistant = () => {
       alert('Please fill in this field before proceeding.');
       return;
     }
-    
+
     if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
     } else {
@@ -126,7 +127,9 @@ const ResearchAssistant = () => {
     setLoading(true);
     setResponse('');
 
-    const prompt = `You are an AI Research Assistant specializing in Legal & Compliance Insights for Company Secretaries.
+    const prompt = `${LEGAL_COMPLIANCE_PROMPT}
+
+You are an AI Research Assistant specializing in Legal & Compliance Insights for Company Secretaries.
 
 Research Request:
 - Topic/Subject: ${formData.topic}
@@ -362,14 +365,14 @@ Remove all introductory paragraph, end notes and any other non-relevant content.
               <h2 className="card-title mb-0">AI Research Assistant</h2>
               <span className="badge bg-primary">Step {currentStep} of {steps.length}</span>
             </div>
-            
+
             <div className="progress mb-4">
-              <div 
-                className="progress-bar" 
-                role="progressbar" 
+              <div
+                className="progress-bar"
+                role="progressbar"
                 style={{ width: `${(currentStep / steps.length) * 100}%` }}
-                aria-valuenow={currentStep} 
-                aria-valuemin="0" 
+                aria-valuenow={currentStep}
+                aria-valuemin="0"
                 aria-valuemax={steps.length}
               ></div>
             </div>
@@ -380,7 +383,7 @@ Remove all introductory paragraph, end notes and any other non-relevant content.
                   {currentStepData.question}
                   {currentStepData.optional && <span className="text-muted"> (Optional)</span>}
                 </Form.Label>
-                
+
                 {currentStepData.type === 'text' ? (
                   <Form.Control
                     type="text"
@@ -409,16 +412,16 @@ Remove all introductory paragraph, end notes and any other non-relevant content.
               </Form.Group>
 
               <div className="d-flex justify-content-between">
-                <Button 
-                  variant="outline-secondary" 
+                <Button
+                  variant="outline-secondary"
                   onClick={handlePrevious}
                   disabled={currentStep === 1}
                 >
                   <FaArrowLeft className="me-1" />
                   Previous
                 </Button>
-                
-                <Button 
+
+                <Button
                   className="features-button"
                   onClick={handleNext}
                 >

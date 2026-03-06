@@ -6,6 +6,7 @@ import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaBalanceScale, FaSearch } fr
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
+import { LEGAL_COMPLIANCE_PROMPT } from '../constants/legalPrompt';
 
 const LegalOpinion = () => {
   const [formData, setFormData] = useState({
@@ -35,7 +36,8 @@ const LegalOpinion = () => {
     setLoading(true);
     setResponse('');
 
-    const prompt = `
+    const prompt = `${LEGAL_COMPLIANCE_PROMPT}
+
 You are a senior legal expert specialized in Indian Company Law under the Companies Act, 2013.
 
 A user has submitted the following legal query and selected a preferred output format. Based on this, draft a complete legal opinion, beginning with a professional heading, followed by a standard opening paragraph, format-specific structured content, and ending with a disclaimer that limits the liability of the Company Secretary or Legal Advisor issuing the opinion.

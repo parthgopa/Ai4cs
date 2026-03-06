@@ -6,6 +6,7 @@ import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaSearch } from 'react-icons/
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
+import { LEGAL_COMPLIANCE_PROMPT } from '../constants/legalPrompt';
 
 const ScenarioSolver = () => {
   const [loading, setLoading] = useState(false);
@@ -29,7 +30,9 @@ const ScenarioSolver = () => {
     setLoading(true);
     setResponse('');
 
-    const prompt = `You are a qualified Company Secretary with expertise in Indian corporate laws. 
+    const prompt = `${LEGAL_COMPLIANCE_PROMPT}
+    
+You are a qualified Company Secretary with expertise in Indian corporate laws.
     Analyze the following corporate legal scenario and provide a clear, structured response in steps in note form:
 
 1. Identify the applicable provisions from the Companies Act, 2013 or other relevant laws.

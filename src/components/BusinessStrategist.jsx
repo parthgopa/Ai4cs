@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Container, Row, Col, Card, Form, Button, Spinner } from "react-bootstrap";
+import { Container, Row, Col, Card, Form, Button, Spinner, Modal } from "react-bootstrap";
 import ReactMarkdown from "react-markdown";
 import "../styles/BusinessStrategist.css";
 import { backend_URL } from "./HomePage";
-import { FaSuitcase, FaSuitcaseRolling, FaPaperPlane } from "react-icons/fa";
-import { FaSuitcaseMedical } from "react-icons/fa6";
+import { FaPaperPlane } from "react-icons/fa";
 
 const BusinessStrategist = () => {
   const [sessionId, setSessionId] = useState(null);
@@ -12,8 +11,24 @@ const BusinessStrategist = () => {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [consultationStarted, setConsultationStarted] = useState(false);
+  const [selectedFunction, setSelectedFunction] = useState(null);
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [functionName, setFunctionName] = useState("");
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
+
+  // 9 Strategy Functions
+  const strategyFunctions = [
+    { id: "business_diagnosis", name: "Business Diagnosis", image: "/images/diagnosis.jpeg" },
+    { id: "market_analysis", name: "Market Analysis", image: "/images/market.jpeg" },
+    { id: "strategic_planning", name: "Strategic Planning", image: "/images/planning.jpeg" },
+    { id: "financial_strategy", name: "Financial Strategy", image: "/images/financial.jpeg" },
+    { id: "gtm_strategy", name: "GTM Strategy", image: "/images/gtm.jpeg" },
+    { id: "operations_optimization", name: "Operations", image: "/images/operations.jpeg" },
+    { id: "risk_management", name: "Risk Management", image: "/images/risk.jpeg" },
+    { id: "leadership_support", name: "Leadership Support", image: "/images/leadership.jpeg" },
+    { id: "execution_roadmap", name: "Execution Roadmap", image: "/images/execution.jpeg" }
+  ];
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -23,7 +38,13 @@ const BusinessStrategist = () => {
     scrollToBottom();
   }, [messages]);
 
-  const startConsultation = async () => {
+  const handleFunctionSelect = (func) => {
+    setSelectedFunction(func);
+    setShowConfirmation(true);
+  };
+
+  const handleConfirmStart = async () => {
+    setShowConfirmation(false);
     setLoading(true);
     try {
       const response = await fetch(`${backend_URL}/business-strategist/consultation`, {
@@ -32,7 +53,8 @@ const BusinessStrategist = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          type: "start"
+          type: "start",
+          function_type: selectedFunction.id
         }),
       });
 
@@ -42,6 +64,7 @@ const BusinessStrategist = () => {
 
       const data = await response.json();
       setSessionId(data.session_id);
+      setFunctionName(data.function_name);
       setConsultationStarted(true);
       
       setMessages([
@@ -57,6 +80,11 @@ const BusinessStrategist = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCancelConfirmation = () => {
+    setShowConfirmation(false);
+    setSelectedFunction(null);
   };
 
   const sendMessage = async () => {
@@ -118,6 +146,8 @@ const BusinessStrategist = () => {
     setMessages([]);
     setUserInput("");
     setConsultationStarted(false);
+    setSelectedFunction(null);
+    setFunctionName("");
   };
 
   return (
@@ -127,58 +157,53 @@ const BusinessStrategist = () => {
           <Col xs={12} lg={10} xl={9} className="h-100">
             <div className="strategist-container">
               <div className="strategist-header">
-                <h1 className="strategist-title">Business Strategist</h1>
+                <h1 className="strategist-title">Strategex AI</h1>
                 <p className="strategist-subtitle">
-                  AI-Powered Senior Management Consultant
+                  AI-Powered Business Strategy Consultant
                 </p>
               </div>
 
               {!consultationStarted ? (
-                <Card className="welcome-card">
-                  <Card.Body>
-                    <div className="welcome-content">
-                      {/* <div className="welcome-icon"> <FaSuitcaseRolling /></div> */}
-                      <h2 style={{marginTop :"25px"}}>Welcome to Business Strategist</h2>
-                      <p className="welcome-description">
-                        Get expert strategic advice on business functions including:
-                      </p>
-                      <ul className="features-list">
-                        <li>Business Diagnosis & Problem Identification</li>
-                        <li>Market & Competitive Analysis</li>
-                        <li>Strategic Planning & Growth Strategy</li>
-                        <li>Financial Strategy & Profitability</li>
-                        <li>Go-To-Market Strategy</li>
-                        <li>Operations & Process Optimization</li>
-                        <li>Risk Management & Business Continuity</li>
-                        <li>Leadership / Board-Level Decision Support</li>
-                      </ul>
-                      
-                    </div>
-                    <Button
-                        className="start-btn"
-                        onClick={startConsultation}
-                        disabled={loading}
+                <div className="function-selection">
+                  <h2 className="selection-title">Select Your Strategic Focus</h2>
+                  <p className="selection-subtitle">Choose one area to begin your consultation</p>
+                  
+                  <div className="functions-grid">
+                    {strategyFunctions.map((func) => (
+                      <Card 
+                        key={func.id} 
+                        className="function-card"
+                        onClick={() => handleFunctionSelect(func)}
                       >
-                        {loading ? (
-                          <>
-                            <Spinner
-                              as="span"
-                              animation="border"
-                              size="sm"
-                              role="status"
-                              aria-hidden="true"
-                              className="me-2"
+                        <Card.Body className="function-card-body">
+                          <div className="function-image-wrapper">
+                            <img 
+                              src={func.image} 
+                              alt={func.name}
+                              className="function-image"
+                              onError={(e) => {
+                                e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23e0e0e0'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Arial' font-size='14' fill='%23666'%3E{func.name}%3C/text%3E%3C/svg%3E";
+                              }}
                             />
-                            Starting...
-                          </>
-                        ) : (
-                          "Start Consultation"
-                        )}
-                      </Button>
-                  </Card.Body>
-                </Card>
+                          </div>
+                          <h5 className="function-name">{func.name}</h5>
+                        </Card.Body>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
               ) : (
                 <div className="chat-container">
+                  <div className="chat-header-bar">
+                    <h4 className="chat-function-title">{functionName}</h4>
+                    <Button 
+                      variant="outline-secondary" 
+                      size="sm" 
+                      onClick={resetConsultation}
+                    >
+                      Change Function
+                    </Button>
+                  </div>
                   <div className="chat-messages" ref={chatContainerRef}>
                     {messages.map((message, index) => (
                       <div
@@ -256,6 +281,42 @@ const BusinessStrategist = () => {
           </Col>
         </Row>
       </Container>
+
+      {/* Confirmation Modal */}
+      <Modal show={showConfirmation} onHide={handleCancelConfirmation} centered>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Strategy Selection</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p>You have selected:</p>
+          <h5 className="text-primary">{selectedFunction?.name}</h5>
+          <p className="mt-3">
+            Would you like to continue and create a strategy for this function?
+          </p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCancelConfirmation}>
+            Cancel
+          </Button>
+          <Button variant="primary" onClick={handleConfirmStart} disabled={loading}>
+            {loading ? (
+              <>
+                <Spinner
+                  as="span"
+                  animation="border"
+                  size="sm"
+                  role="status"
+                  aria-hidden="true"
+                  className="me-2"
+                />
+                Starting...
+              </>
+            ) : (
+              "Continue"
+            )}
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </div>
   );
 };

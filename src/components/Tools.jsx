@@ -26,13 +26,13 @@ import ComingSoonModal from "./ComingSoonModal";
 
 // Tools data - moved outside component for sharing
 const toolsFunctionalities = [
-    {
-    id: "business-strategist",
-    title: "Business Strategist",
-    category: "Strategy",
-    icon: FaBriefcase,
-    route: "/business-strategist"
-  },
+  //   {
+  //   id: "business-strategist",
+  //   title: "Business Strategist",
+  //   category: "Strategy",
+  //   icon: FaBriefcase,
+  //   route: "/business-strategist"
+  // },
   {
     id: "compliance-calendar",
     title: "Compliance Calendar",
@@ -116,6 +116,13 @@ const toolsFunctionalities = [
     category: "Legal",
     icon: FaGavel,
     route: "/judgment-simulator"
+  },
+  {
+    id: "court-drafting",
+    title: "Court Drafting",
+    category: "Draft",
+    icon: FaGavel,
+    route: "/court-drafting"
   },
   {
     id: "policy-drafting",
@@ -234,6 +241,7 @@ const enabledToolIdsFromTools = new Set([
   "mini-law-library",
   "case-digest",
   "judgment-simulator",
+  "court-drafting",
   "research-assistant",
   "resolution-assistant",
   "email-drafter",
@@ -293,7 +301,7 @@ const Tools = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const filteredFunctionalities = functionalities.filter((f) => {
-    
+
     const q = searchQuery.trim().toLowerCase();
     const categoryMatch =
       selectedCategory === "All" || f.category === selectedCategory;
@@ -354,6 +362,8 @@ const Tools = () => {
       navigate("/case-digest");
     } else if (id === "judgment-simulator") {
       navigate("/judgment-simulator");
+    } else if (id === "court-drafting") {
+      navigate("/court-drafting");
     } else if (id === "research-assistant") {
       navigate("/research-assistant");
     } else if (id === "resolution-assistant") {
@@ -404,9 +414,8 @@ const Tools = () => {
                 <Col xs={12} md={6}>
                   <div className="category-filters">
                     <button
-                      className={`category-filter ${
-                        selectedCategory === "All" ? "active" : ""
-                      }`}
+                      className={`category-filter ${selectedCategory === "All" ? "active" : ""
+                        }`}
                       onClick={() => setSelectedCategory("All")}
                     >
                       All
@@ -414,9 +423,8 @@ const Tools = () => {
                     {categories.map((category) => (
                       <button
                         key={category}
-                        className={`category-filter ${
-                          selectedCategory === category ? "active" : ""
-                        }`}
+                        className={`category-filter ${selectedCategory === category ? "active" : ""
+                          }`}
                         onClick={() => setSelectedCategory(category)}
                       >
                         {category}
@@ -436,9 +444,8 @@ const Tools = () => {
               {filteredFunctionalities.length > 0 ? (
                 filteredFunctionalities.map((item) => {
                   const isEnabled = enabledIds.has(item.id);
-                  const cardClass = `tool-card ${
-                    isEnabled ? "" : "disabled-tool"
-                  }`;
+                  const cardClass = `tool-card ${isEnabled ? "" : "disabled-tool"
+                    }`;
                   return (
                     <div key={item.id} className="tool-card-wrapper">
                       <Card

@@ -6,6 +6,7 @@ import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaSearch } from 'react-icons/
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
+import { LEGAL_COMPLIANCE_PROMPT } from '../constants/legalPrompt';
 
 const LegalResearch = () => {
   const [formData, setFormData] = useState({
@@ -28,7 +29,9 @@ const LegalResearch = () => {
     setLoading(true);
     setResponse('');
 
-    const prompt = `You are a senior legal research analyst and AI assistant specializing in Indian corporate, regulatory, and compliance law.
+    const prompt = `${LEGAL_COMPLIANCE_PROMPT}
+    
+You are a senior legal research analyst and AI assistant specializing in Indian corporate, regulatory, and compliance law.
 Interpret the following user's query and respond by referring to any or all of the following legal frameworks, depending on the context:
 
 Indian Companies Act, 2013 (with all amendments)
@@ -92,7 +95,7 @@ User query - "${formData.userQuery}"`;
 
   const RedStrong = ({ children }) => {
     // Apply Tailwind CSS class 'text-red-500' to make the text red
-    return <strong style={{textDecoration: 'underline'}}>{children}</strong>;
+    return <strong style={{ textDecoration: 'underline' }}>{children}</strong>;
   };
 
   const copyToClipboard = () => {
@@ -121,7 +124,7 @@ User query - "${formData.userQuery}"`;
                 Comprehensive legal research and analysis for Indian corporate law
               </p>
             </Card.Header>
-            
+
             <Card.Body>
               <Form onSubmit={handleSubmit} onKeyDown={handleKeyDown}>
                 <Row>
@@ -182,12 +185,12 @@ User query - "${formData.userQuery}"`;
                         <FaCopy className="me-1" />
                         Copy
                       </Button>
-                      <Button 
+                      <Button
                         variant="outline-danger"
-                        size="sm" 
+                        size="sm"
                         onClick={() => {
-                          const { generatePDF } = PDFGenerator({ 
-                            content: response, 
+                          const { generatePDF } = PDFGenerator({
+                            content: response,
                             fileName: `legal-research-analysis-${new Date().toISOString().split('T')[0]}.pdf`,
                             title: "Legal Research Analysis"
                           });
@@ -198,12 +201,12 @@ User query - "${formData.userQuery}"`;
                         <FaFilePdf className="me-1" />
                         <span className="d-none d-sm-inline">PDF</span>
                       </Button>
-                      <Button 
+                      <Button
                         variant="outline-success"
-                        size="sm" 
+                        size="sm"
                         onClick={() => {
-                          const { generateWord } = WordGenerator({ 
-                            content: response, 
+                          const { generateWord } = WordGenerator({
+                            content: response,
                             fileName: `legal-research-analysis-${new Date().toISOString().split('T')[0]}.docx`,
                             title: "Legal Research Analysis"
                           });
@@ -218,10 +221,10 @@ User query - "${formData.userQuery}"`;
                   <Card.Body>
                     <div className="markdown-content">
                       <ReactMarkdown
-                      components={{
-                        // Override the default 'strong' component with our custom 'RedStrong' component
-                        strong: RedStrong,
-                      }}
+                        components={{
+                          // Override the default 'strong' component with our custom 'RedStrong' component
+                          strong: RedStrong,
+                        }}
                       >{response}</ReactMarkdown>
                     </div>
                   </Card.Body>

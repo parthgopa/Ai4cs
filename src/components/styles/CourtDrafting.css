@@ -1,0 +1,229 @@
+/* Court Drafting Styles */
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.page-description {
+    font-size: 1rem;
+    color: var(--muted-color);
+}
+
+/* Engine Selection Cards */
+.engine-card {
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    background-color: var(--card-bg);
+    box-shadow: var(--shadow-sm);
+}
+
+.engine-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.engine-icon {
+    padding: 1rem;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    display: inline-block;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Form Sections */
+.form-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.form-section:last-child {
+    border-bottom: none;
+}
+
+.section-title {
+    color: var(--primary-color);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Verification Summary */
+.verification-summary {
+    background-color: var(--accent-color);
+    padding: 1.5rem;
+    border-radius: 8px;
+}
+
+.verification-summary table {
+    background-color: var(--card-bg);
+}
+
+.verification-summary th,
+.verification-summary td {
+    color: var(--text-color) !important;
+}
+
+/* Loading States */
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .page-title {
+        font-size: 1.5rem;
+    }
+
+    .engine-card {
+        margin-bottom: 1rem;
+    }
+
+    .engine-icon {
+        width: 80px;
+        height: 80px;
+    }
+
+    .engine-icon svg {
+        font-size: 2.5rem !important;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+    }
+
+    .form-section {
+        padding-bottom: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .verification-summary {
+        padding: 1rem;
+    }
+
+    .verification-summary table {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .page-header {
+        text-align: center;
+    }
+
+    .page-title {
+        font-size: 1.3rem;
+    }
+
+    .page-description {
+        font-size: 0.9rem;
+    }
+
+    .engine-icon {
+        width: 70px;
+        height: 70px;
+    }
+
+    .engine-icon svg {
+        font-size: 2rem !important;
+    }
+
+    .engine-card h3 {
+        font-size: 1.3rem;
+    }
+
+    .engine-card h5 {
+        font-size: 1rem;
+    }
+
+    .engine-card ul {
+        font-size: 0.85rem;
+    }
+
+    .section-title {
+        font-size: 1rem;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .section-title .badge {
+        margin-bottom: 0.5rem;
+    }
+
+    .verification-summary table {
+        font-size: 0.85rem;
+    }
+
+    .verification-summary td:first-child {
+        width: 40%;
+    }
+}
+
+/* Dark Theme Support */
+.dark-theme .engine-card {
+    background-color: var(--card-bg);
+    border-color: var(--border-color);
+}
+
+.dark-theme .engine-card:hover {
+    border-color: var(--primary-color);
+}
+
+.dark-theme .engine-icon {
+    background-color: var(--accent-color);
+}
+
+.dark-theme .verification-summary {
+    background-color: var(--accent-color);
+}
+
+.dark-theme .verification-summary table {
+    background-color: var(--card-bg);
+}
+
+.dark-theme .form-section {
+    border-bottom-color: var(--border-color);
+}
+
+/* Alert Customization for Dark Theme */
+.dark-theme .alert {
+    background-color: rgba(255, 193, 7, 0.2);
+    border-color: rgba(255, 193, 7, 0.3);
+    color: var(--text-color);
+}
+
+.dark-theme .alert-warning {
+    background-color: rgba(255, 193, 7, 0.2);
+}
+
+.dark-theme .alert-info {
+    background-color: rgba(13, 202, 240, 0.2);
+}
+
+.dark-theme .alert-danger {
+    background-color: rgba(220, 53, 69, 0.2);
+}
