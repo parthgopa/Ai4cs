@@ -15,6 +15,7 @@ import {
   FaEnvelope,
   FaFileInvoice,
   FaBriefcase,
+  FaFileSignature,
 } from "react-icons/fa";
 import {
   MdUpdate,
@@ -125,6 +126,13 @@ const toolsFunctionalities = [
     route: "/court-drafting"
   },
   {
+    id: "affidavit-legal-note",
+    title: "Affidavit & Legal Note",
+    category: "Draft",
+    icon: FaFileSignature,
+    route: "/affidavit-legal-note"
+  },
+  {
     id: "policy-drafting",
     title: "Policy Drafting",
     category: "Policy",
@@ -134,14 +142,14 @@ const toolsFunctionalities = [
   {
     id: "agreement-drafting",
     title: "Agreement Drafting",
-    category: "Agreement",
+    category: "Draft",
     icon: MdAssessment,
     route: "/agreement-drafting"
   },
   {
     id: "capital-raising-advisory-agreement",
     title: "Capital Raising Advisory Agreement",
-    category: "Agreement",
+    category: "Draft",
     icon: MdAssessment,
     route: "/capital-raising-advisory-agreement"
   },
@@ -242,6 +250,7 @@ const enabledToolIdsFromTools = new Set([
   "case-digest",
   "judgment-simulator",
   "court-drafting",
+  "affidavit-legal-note",
   "research-assistant",
   "resolution-assistant",
   "email-drafter",
@@ -364,6 +373,8 @@ const Tools = () => {
       navigate("/judgment-simulator");
     } else if (id === "court-drafting") {
       navigate("/court-drafting");
+    } else if (id === "affidavit-legal-note") {
+      navigate("/affidavit-legal-note");
     } else if (id === "research-assistant") {
       navigate("/research-assistant");
     } else if (id === "resolution-assistant") {

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Container, Row, Col, Card, Form, Button, Badge } from 'react-bootstrap';
-import { FaArrowLeft, FaCheckCircle, FaSpinner } from 'react-icons/fa';
+import { FaCheckCircle, FaSpinner } from 'react-icons/fa';
 import VerificationModal from './VerificationModal';
 import OutputDisplay from './OutputDisplay';
 import APIService from '../../Common/API';
 
-const EngineA = ({ onBack }) => {
+const EngineA = () => {
     const [step, setStep] = useState('form'); // 'form', 'verify', 'output'
     const [loading, setLoading] = useState(false);
     const [response, setResponse] = useState('');
@@ -246,7 +246,6 @@ Generate the court-ready ${formData.pleadingType} now.
                     setStep('form');
                     setResponse('');
                 }}
-                onNewDraft={onBack}
             />
         );
     }
@@ -255,22 +254,13 @@ Generate the court-ready ${formData.pleadingType} now.
         <Container className="py-4">
             <Row className="justify-content-center">
                 <Col md={10}>
-                    <div className="d-flex align-items-center mb-4">
-                        <Button 
-                            variant="outline-secondary" 
-                            onClick={onBack}
-                            className="me-3"
-                        >
-                            <FaArrowLeft /> Back
-                        </Button>
-                        <div>
-                            <h2 className="mb-0" style={{ color: 'var(--primary-color)' }}>
-                                Engine A: Litigation Documents
-                            </h2>
-                            <p className="text-muted mb-0">
-                                {formData.pleadingType} Drafting Form
-                            </p>
-                        </div>
+                    <div className="page-header mb-4">
+                        <h2 className="mb-0" style={{ color: 'var(--primary-color)' }}>
+                            Court Drafting - Litigation Documents
+                        </h2>
+                        <p className="text-muted mb-0">
+                            Professional Legal Drafting for {formData.pleadingType}
+                        </p>
                     </div>
                 </Col>
             </Row>

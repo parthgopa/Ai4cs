@@ -57,13 +57,15 @@ const OutputDisplay = ({ response, loading, documentType, onBack, onNewDraft }) 
                                 </p>
                             </div>
                         </div>
-                        <Button 
-                            variant="outline-primary"
-                            onClick={onNewDraft}
-                        >
-                            <FaPlusCircle className="me-2" />
-                            New Draft
-                        </Button>
+                        {onNewDraft && (
+                            <Button 
+                                variant="outline-primary"
+                                onClick={onNewDraft}
+                            >
+                                <FaPlusCircle className="me-2" />
+                                New Draft
+                            </Button>
+                        )}
                     </div>
                 </Col>
             </Row>

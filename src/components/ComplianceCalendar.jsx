@@ -46,44 +46,28 @@ const ComplianceCalendar = () => {
       financialYear = `FY ${currentYear - 1}-${currentYear}`;
     }
 
-    const prompt = `Generate exhaustive and detailed Statutory Compliance Calendar under Companies Act 2013 and rules made there under and incase of listed public limited companies then include SEBI (LODR),only.
-    for *${formData.companyName}* (${formData.companyType}) 
-    for the quarters ${formData.quarterlyOptions.join(', ')} of the current  year.
-    The current year is determined as follows:
+    const prompt = `Context: Statutory Compliance Calendar Generation.
+     Company: ${formData.companyName} (${formData.companyType}) 
+     Financial Year: ${financialYear}
+     Quarter: ${formData.quarterlyOptions.join(', ')} 
+     
+[Directives]
+- Acts: Companies Act 2013. Include SEBI (LODR) ONLY if "Listed Public Limited".
+- Scope: Detailed compliance items for selected quarters.
+- Output: Strict structured format. No intro/outro/disclaimers.In dot point format.
 
-- If the current month is April or later, the current year is the current year to the next year 
-(e.g., April 2025 to March 2026 would be FY 2025-2026).
-- If the current month is before April, the current year is the previous year to the current year 
-(e.g., January 2025 to March 2025 would be FY 2024-2025).
+[Schema per Item]
+Quarter: [Q# Name]
+  Month: [Month Name]
+    [Act Name]
+      1. [Date] - [Compliance Item]
+         - Form: [Name]
+         - Penalty: [Specific fine]
+         - Remarks: [Note]
 
-Current Year: ${financialYear}
-
-Organize the calendar in the dot points form:
-
-Quarter: [Quarter Number and Name]
-     Month: [Month Name]
-          [Act Name (e.g., Companies Act 2013)]
-               1. [Date] - [Compliance Item]
-                    . Applicable Form: [Form name if any]
-                    . Legal Provision for Non-Compliance: [Specific penalty/fine/consequence]
-                    . Remarks: [Additional notes/clarifications]
-               2. [Date] - [Compliance Item]
-                    . Applicable Form: [Form name if any]
-                    . Legal Provision for Non-Compliance: [Specific penalty/fine/consequence]
-                    . Remarks: [Additional notes/clarifications]
-          [Another Act Name (e.g., SEBI)]
-               1. [Date] - [Compliance Item]
-                    . Applicable Form: [Form name if any]
-                    . Legal Provision for Non-Compliance: [Specific penalty/fine/consequence]
-                    . Remarks: [Additional notes/clarifications]
-
-For each quarter, list all months within that quarter. For each month, group compliance items by the applicable Act. Number each compliance item under each Act sequentially.
-
-Applicable Acts:
-- Companies Act 2013 and rules made thereunder
-- SEBI regulations (only for listed public limited companies)
-Convert the output in the calender Format.
-Exclude any introductory notes, prefaces, end notes or disclaimers from the output.`;
+[Task]
+Generate the calendar sequentially by Month then by Act. Group all items under their respective Acts. 
+Use bullet points as defined in the schema. Convert directly to calendar layout.`;
 
     try {
       await APIService({
