@@ -7,6 +7,7 @@ import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaSearch, FaGavel } from 'rea
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
+import { BASE_LEGAL_PROMPT } from '../constants/legalConstants';
 
 const CourtDrafting = () => {
     const [formData, setFormData] = useState({
@@ -36,7 +37,8 @@ const CourtDrafting = () => {
         setLoading(true);
         setResponse('');
 
-        const prompt = `
+        const prompt = `${BASE_LEGAL_PROMPT}
+
 You are an AI Legal Drafting Assistant operating under strict court-compliance standards for Indian legal drafting (Petition, Appeal, Written Submission, Affidavit, or Legal Note).
 
 CORE OPERATING PROTOCOL:

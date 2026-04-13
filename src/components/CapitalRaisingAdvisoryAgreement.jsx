@@ -7,6 +7,7 @@ import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaArrowRight, FaArrowLeft, Fa
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
+import { BASE_LEGAL_PROMPT } from '../constants/legalConstants';
 
 const CapitalRaisingAdvisoryAgreement = () => {
   // Step management
@@ -97,7 +98,8 @@ const CapitalRaisingAdvisoryAgreement = () => {
       arbitrationClause = 'International Arbitration clause (UNCITRAL Rules, seat = Singapore)';
     }
 
-    const fullPrompt = `
+    const fullPrompt = `${BASE_LEGAL_PROMPT}
+
       I want to draft a Capital Raising Advisory Agreement between a Company and a Consultant.
       Follow this exact process:
 

@@ -4,6 +4,7 @@ import { FaCheckCircle } from 'react-icons/fa';
 import VerificationModal from './CourtDrafting/VerificationModal';
 import OutputDisplay from './CourtDrafting/OutputDisplay';
 import APIService from '../Common/API';
+import { BASE_LEGAL_PROMPT } from '../constants/legalConstants';
 
 const AffidavitLegalNote = () => {
     const [step, setStep] = useState('form');
@@ -67,7 +68,8 @@ const AffidavitLegalNote = () => {
 
     const generatePrompt = () => {
         if (formData.documentType === 'Affidavit') {
-            return `
+            return `${BASE_LEGAL_PROMPT}
+
 ROLE: AI Legal Drafting Assistant for Affidavit (Sworn Declaration)
 
 CORE RULES (STRICT):
@@ -125,7 +127,8 @@ All details must be independently verified before notarization or official use."
 Generate the Affidavit now.
 `;
         } else {
-            return `
+            return `${BASE_LEGAL_PROMPT}
+
 ROLE: AI Legal Drafting Assistant for Legal Note (Advisory / Analytical)
 
 CORE RULES (STRICT):

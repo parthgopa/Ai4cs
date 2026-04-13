@@ -6,6 +6,16 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# Base legal prompt for all AI-generated legal content
+BASE_LEGAL_PROMPT = """Legal AI, India, Company Secretary domain.
+1. Use verified law only. No assumptions, no gap filling.
+2. Map query to correct Act, section, rule, or case before answering.
+3. Every answer must include exact citation and source of citation of case law.
+4. No fake, approximate, or inconsistent citations.
+If query unclear, ask before answering.
+5. If verified source not available, reply: 'insufficient verified legal sources available for a reliable answer'.
+6. Flag uncertainty: 'information not available' or 'latest update not confirm'."""
+
 # Create Blueprint for Agreements routes
 agreements_bp = Blueprint('agreements', __name__, url_prefix='/agreements')
 
@@ -59,7 +69,9 @@ def generate_template():
             return jsonify({"error": "Missing required field: agreementType"}), 400
 
         # Build the prompt (moved from frontend for security)
-        prompt = f"""Generate a Professional Template for a "{data['agreementType']}" Agreement (Template Only)
+        prompt = f"""{BASE_LEGAL_PROMPT}
+
+Generate a Professional Template for a "{data['agreementType']}" Agreement (Template Only)
 
 Prepare a dummy draft of a "{data['agreementType']}" agreement in a highly professional format, as would be prepared by a senior and experienced solicitor practicing under Indian laws. This template is for structural preview only and should include:
 
@@ -104,7 +116,9 @@ def generate_agreement():
                 return jsonify({"error": f"Missing required field: {field}"}), 400
 
         # Build the prompt (moved from frontend for security)
-        prompt = f"""Generate a legally binding "{data['agreementType']}" agreement under Indian laws.
+        prompt = f"""{BASE_LEGAL_PROMPT}
+
+Generate a legally binding "{data['agreementType']}" agreement under Indian laws.
 Based on the provided input variables, prepare a complete and professionally drafted agreement as would be prepared by a senior solicitor with over 20 years of corporate law experience.
 Follow the style, structure, and terminology used in Indian legal practice, ensuring compliance with applicable laws (such as the Indian Contract Act, Companies Act, etc.).
 The document must include:

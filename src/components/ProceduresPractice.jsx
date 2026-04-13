@@ -6,6 +6,7 @@ import { FaCopy, FaFilePdf, FaSpinner, FaFileWord, FaCogs } from 'react-icons/fa
 import PDFGenerator from './PDFGenerator';
 import WordGenerator from './WordGenerator';
 import AIDisclaimer from './AIDisclaimer';
+import { BASE_LEGAL_PROMPT } from '../constants/legalConstants';
 
 const ProceduresPractice = () => {
   const [formData, setFormData] = useState({
@@ -45,7 +46,9 @@ const ProceduresPractice = () => {
     // Determine the actual values to use
     const actualProcedure = formData.entityType === 'Other' ? formData.customProcedure : formData.entityType;
     
-    const prompt = `You are a Company Law Expert and Trainer.
+    const prompt = `${BASE_LEGAL_PROMPT}
+
+You are a Company Law Expert and Trainer.
 I want to practice drafting and understanding legal procedure under the Companies Act, 2013 from a Company Secretary's perspective.
 
 Please follow these steps:

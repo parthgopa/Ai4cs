@@ -174,13 +174,13 @@ const toolsFunctionalities = [
     icon: MdOutlineAppRegistration,
     route: "/reply-to-notice-roc"
   },
-  {
-    id: "petetion-preparator",
-    title: "Petition Preparator",
-    category: "Petition",
-    icon: MdOutlineAppRegistration,
-    route: "/petition-preparator"
-  },
+  // {
+  //   id: "petetion-preparator",
+  //   title: "Petition Preparator",
+  //   category: "Petition",
+  //   icon: MdOutlineAppRegistration,
+  //   route: "/petition-preparator"
+  // },
   {
     id: "board-meeting-assistant",
     title: "Board Meeting Assistant",
