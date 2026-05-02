@@ -53,6 +53,7 @@ import NoteTool from "./components/TextTool/Note/NoteTool";
 import TextIntelligenceHub from "./components/TextIntelligenceHub/TextIntelligenceHub";
 import BusinessStrategist from "./components/BusinessStrategist";
 import CourtDrafting from "./components/CourtDrafting/index";
+import CourtDocument from "./components/CourtDocument";
 import AffidavitLegalNote from "./components/AffidavitLegalNote";
 
 function App() {
@@ -175,6 +176,7 @@ function App() {
               <Route path="/business-strategist" element={<BusinessStrategist />} />
               <Route path="/court-drafting" element={<CourtDrafting />} />
               <Route path="/affidavit-legal-note" element={<AffidavitLegalNote />} />
+              <Route path="/court-document" element={<CourtDocument />} />
 
             </Routes>
           </main>

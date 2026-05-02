@@ -126,6 +126,13 @@ const toolsFunctionalities = [
     route: "/court-drafting"
   },
   {
+    id: "court-document",
+    title: "Court Document",
+    category: "Draft",
+    icon: FaFileSignature,
+    route: "/court-document"
+  },
+  {
     id: "affidavit-legal-note",
     title: "Affidavit & Legal Note",
     category: "Draft",
@@ -250,6 +257,7 @@ const enabledToolIdsFromTools = new Set([
   "case-digest",
   "judgment-simulator",
   "court-drafting",
+  "court-document",
   "affidavit-legal-note",
   "research-assistant",
   "resolution-assistant",
@@ -373,6 +381,8 @@ const Tools = () => {
       navigate("/judgment-simulator");
     } else if (id === "court-drafting") {
       navigate("/court-drafting");
+    } else if (id === "court-document") {
+      navigate("/court-document");
     } else if (id === "affidavit-legal-note") {
       navigate("/affidavit-legal-note");
     } else if (id === "research-assistant") {

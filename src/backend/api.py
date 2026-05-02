@@ -51,3 +51,45 @@ def generate():
     except Exception as e:
         print("API ERROR:", e)
         return jsonify({"error": "Internal server error"}), 500
+
+
+@api_bp.route("/chat", methods=["POST", "OPTIONS"])
+def chat():
+    """Multi-turn conversation endpoint for Court Document feature"""
+    if request.method == "OPTIONS":
+        return jsonify({"status": "ok"}), 200
+
+    try:
+        data = request.get_json(silent=True)
+        if not data:
+            return jsonify({"error": "Invalid JSON body"}), 400
+
+        messages = data.get("messages", [])
+        if not messages:
+            return jsonify({"error": "Messages are required"}), 400
+
+        # Convert frontend message format to Gemini format
+        contents = []
+        for msg in messages:
+            role = "user" if msg.get("role") == "user" else "model"
+            contents.append({
+                "role": role,
+                "parts": [{"text": msg.get("content", "")}]
+            })
+
+        response = client.models.generate_content(
+            model="gemini-3-flash-preview",
+            contents=contents
+        )
+
+        if not response or not response.text:
+            return jsonify({
+                "error": "Gemini API failed",
+                "details": "No content returned"
+            }), 500
+
+        return jsonify({"text": response.text})
+
+    except Exception as e:
+        print("CHAT API ERROR:", e)
+        return jsonify({"error": "Internal server error", "details": str(e)}), 500
