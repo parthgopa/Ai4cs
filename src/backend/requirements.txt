@@ -6,3 +6,5 @@ gunicorn
 PyMuPDF
 python-docx
 google-genai
+pymongo
+cryptography
