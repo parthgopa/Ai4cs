@@ -334,6 +334,19 @@ const Tools = () => {
   });
 
   const handleFunctionalityClick = (id, title) => {
+    const isLoggedIn = !!localStorage.getItem("userEmail");
+    if (!isLoggedIn) {
+      window.dispatchEvent(new CustomEvent("trigger-login", { detail: { stage: "login" } }));
+      return;
+    }
+
+    const byokEnabled = localStorage.getItem("byokEnabled") === "true";
+    const hasGeminiKey = localStorage.getItem("hasGeminiKey") === "true";
+    if (byokEnabled && !hasGeminiKey) {
+      window.dispatchEvent(new CustomEvent("trigger-login", { detail: { stage: "key" } }));
+      return;
+    }
+
     // Navigate to specific pages for implemented features, show modal for others
     if (id === "compliance-calendar") {
       navigate("/compliance-calendar");

@@ -30,6 +30,7 @@ def consultation():
     try:
         data = request.json
         consultation_type = data.get("type")
+        user_email = request.headers.get("X-User-Email")
 
         if consultation_type == "start":
             function_type = data.get("function_type")
@@ -37,7 +38,7 @@ def consultation():
             if not function_type or function_type not in FUNCTION_TYPES:
                 return jsonify({"error": "Invalid or missing function_type"}), 400
             
-            session_id, first_q = create_session(function_type)
+            session_id, first_q = create_session(function_type, user_email)
             return jsonify({
                 "session_id": session_id,
                 "question": first_q,
@@ -52,7 +53,7 @@ def consultation():
             if not session_id or not answer:
                 return jsonify({"error": "Invalid request. Session ID and answer required."}), 400
 
-            q = next_question(session_id, answer)
+            q = next_question(session_id, answer, user_email)
             return jsonify({"question": q})
         
         else:

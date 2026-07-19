@@ -489,3 +489,62 @@ a:hover {
     font-size: 0.9rem;
   }
 }
+
+/* Auth Modal Styles & Cursor Hovers */
+.auth-modal .btn {
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.auth-modal .btn:hover:not(:disabled) {
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.auth-modal .btn-primary {
+  background-color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+.auth-modal .btn-primary:hover:not(:disabled) {
+  background-color: var(--secondary-color) !important;
+  border-color: var(--secondary-color) !important;
+}
+
+.auth-modal .btn-outline-secondary {
+  color: var(--text-color) !important;
+  border-color: var(--border-color) !important;
+  background-color: transparent !important;
+}
+
+.auth-modal .btn-outline-secondary:hover:not(:disabled) {
+  background-color: var(--accent-color) !important;
+  color: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+}
+
+.auth-modal .form-control {
+  background-color: var(--card-bg) !important;
+  color: var(--text-color) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  padding: 0.75rem !important;
+}
+
+.auth-modal .form-control:focus {
+  border-color: var(--primary-color) !important;
+  box-shadow: 0 0 0 3px var(--focus-ring) !important;
+}
+
+/* Header Auth Buttons & Clickable Elements */
+.header-auth-section .btn {
+  cursor: pointer !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.header-auth-section .btn:hover {
+  transform: translateY(-1px) !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+

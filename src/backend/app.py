@@ -1,14 +1,21 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from dotenv import load_dotenv
+from database import init_db
 
 # Import blueprints
 from api import api_bp
 from texttool import texttool_bp
 from agreements import agreements_bp
 from business_strategist import business_strategist_bp
+from auth import auth_bp
+from admin_auth import admin_auth_bp
+from admin_portal import admin_portal_bp
 
 load_dotenv()
+
+# Initialize Database
+init_db()
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -18,6 +25,9 @@ CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "https://ai4cs
 
 # Register blueprints with proper URL prefixes
 app.register_blueprint(api_bp, url_prefix='/api')
+app.register_blueprint(auth_bp, url_prefix='/api/auth')
+app.register_blueprint(admin_auth_bp, url_prefix='/api/admin/auth')
+app.register_blueprint(admin_portal_bp, url_prefix='/api/admin')
 app.register_blueprint(texttool_bp, url_prefix='/texttool')
 app.register_blueprint(agreements_bp, url_prefix='/agreements')
 app.register_blueprint(business_strategist_bp, url_prefix='/business-strategist')

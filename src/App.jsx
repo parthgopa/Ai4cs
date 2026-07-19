@@ -1,8 +1,23 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import axios from "axios";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./styles/theme.css";
+
+// Configure global Axios interceptor for X-User-Email header
+axios.interceptors.request.use(
+  (config) => {
+    const email = localStorage.getItem("userEmail");
+    if (email) {
+      config.headers["X-User-Email"] = email;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 // Custom Components
 import { ThemeProvider } from "./Common/ThemeContext";
@@ -55,133 +70,143 @@ import BusinessStrategist from "./components/BusinessStrategist";
 import CourtDrafting from "./components/CourtDrafting/index";
 import CourtDocument from "./components/CourtDocument";
 import AffidavitLegalNote from "./components/AffidavitLegalNote";
+import AdminPortal from "./components/Admin/AdminPortal";
+
+function AppContent() {
+  const location = useLocation();
+  const isAdmin = location.pathname.startsWith("/admin");
+
+  return (
+    <div className="app-wrapper">
+      {!isAdmin && <Header />}
+      <main className="main-content" style={isAdmin ? { padding: 0 } : {}}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/tools" element={<Tools />} />
+          <Route
+            path="/resolutions"
+            element={<ResolutionsDraftingPage />}
+          />
+          <Route
+            path="/compliance-calendar"
+            element={<ComplianceCalendar />}
+          />
+          <Route
+            path="/procedure-practice"
+            element={<ProceduresPractice />}
+          />
+          <Route path="/policy-drafting" element={<PolicyDrafting />} />
+          <Route
+            path="/policy-drafting/meeting-and-minutes-policy"
+            element={<MeetingMinutesPolicy />}
+          />
+          <Route
+            path="/policy-drafting/statutory-registers-policy"
+            element={<StatutoryRegisterMaintenancePolicy />}
+          />
+          <Route
+            path="/policy-drafting/related-party-transaction-policy"
+            element={<RelatedPartyTransactionPolicy />}
+          />
+          <Route
+            path="/policy-drafting/insider-trading-policy"
+            element={<InsiderTradingPolicy />}
+          />
+          <Route
+            path="/policy-drafting/document-management-policy"
+            element={<DocumentManagementPolicy />}
+          />
+          <Route
+            path="/policy-drafting/csr-policy"
+            element={<CSRPolicy />}
+          />
+          <Route path="/scenario-solver" element={<ScenarioSolver />} />
+          <Route
+            path="/agreement-drafting"
+            element={<AgreementDrafting />}
+          />
+          <Route
+            path="/secretarial-audit-toolkit"
+            element={<SecretarialAudit />}
+          />
+          <Route path="/reply-to-notice-rd" element={<ReplyToNoticeRD />} />
+          <Route
+            path="/reply-to-notice-nclt"
+            element={<ReplyToNoticeNCLT />}
+          />
+          <Route
+            path="/reply-to-notice-roc"
+            element={<ReplyToNoticeROC />}
+          />
+          <Route
+            path="/petetion-preparator"
+            element={<PetitionPreparator />}
+          />
+          <Route path="/legal-research" element={<LegalResearch />} />
+          <Route path="/legal-opinion" element={<LegalOpinion />} />
+          <Route
+            path="/regulatory-updation"
+            element={<RegulatoryUpdation />}
+          />
+          <Route
+            path="/statutory-registers"
+            element={<StatutoryRegisters />}
+          />
+          <Route
+            path="/board-meeting-assistant"
+            element={<BoardMeetingAssistant />}
+          />
+          <Route
+            path="/general-meeting-assistant"
+            element={<GeneralMeetingAssistant />}
+          />
+          <Route path="/forms" element={<Forms />} />
+          <Route
+            path="/capital-raising-advisory-agreement"
+            element={<CapitalRaisingAdvisoryAgreement />}
+          />
+          <Route path="/mini-law-library" element={<MiniLawLibrary />} />
+          <Route path="/case-digest" element={<CaseDigest />} />
+          <Route
+            path="/judgment-simulator"
+            element={<JudgmentSimulator />}
+          />
+          <Route
+            path="/research-assistant"
+            element={<ResearchAssistant />}
+          />
+          <Route
+            path="/resolution-assistant"
+            element={<ResolutionAssistant />}
+          />
+          <Route path="/email-drafter" element={<EmailDrafter />} />
+          <Route path="/text-tool" element={<TextTool />} />
+          <Route path="/text-tool/email" element={<EmailTool />} />
+          <Route path="/text-tool/letter" element={<LetterTool />} />
+          <Route path="/text-tool/report" element={<ReportTool />} />
+          <Route path="/text-tool/blog" element={<BlogTool />} />
+          <Route path="/text-tool/note" element={<NoteTool />} />
+          <Route path="/text-tool/intelligence" element={<TextIntelligenceHub />} />
+          <Route path="/business-strategist" element={<BusinessStrategist />} />
+          <Route path="/court-drafting" element={<CourtDrafting />} />
+          <Route path="/affidavit-legal-note" element={<AffidavitLegalNote />} />
+          <Route path="/court-document" element={<CourtDocument />} />
+          <Route path="/admin" element={<AdminPortal />} />
+        </Routes>
+      </main>
+      {!isAdmin && <Footer />}
+    </div>
+  );
+}
 
 function App() {
   return (
     <ThemeProvider>
       <Router>
         <ScrollToTop />
-        <div className="app-wrapper">
-          <Header />
-          <main className="main-content">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/tools" element={<Tools />} />
-              <Route
-                path="/resolutions"
-                element={<ResolutionsDraftingPage />}
-              />
-              <Route
-                path="/compliance-calendar"
-                element={<ComplianceCalendar />}
-              />
-              <Route
-                path="/procedure-practice"
-                element={<ProceduresPractice />}
-              />
-              <Route path="/policy-drafting" element={<PolicyDrafting />} />
-              <Route
-                path="/policy-drafting/meeting-and-minutes-policy"
-                element={<MeetingMinutesPolicy />}
-              />
-              <Route
-                path="/policy-drafting/statutory-registers-policy"
-                element={<StatutoryRegisterMaintenancePolicy />}
-              />
-              <Route
-                path="/policy-drafting/related-party-transaction-policy"
-                element={<RelatedPartyTransactionPolicy />}
-              />
-              <Route
-                path="/policy-drafting/insider-trading-policy"
-                element={<InsiderTradingPolicy />}
-              />
-              <Route
-                path="/policy-drafting/document-management-policy"
-                element={<DocumentManagementPolicy />}
-              />
-              <Route
-                path="/policy-drafting/csr-policy"
-                element={<CSRPolicy />}
-              />
-              <Route path="/scenario-solver" element={<ScenarioSolver />} />
-              <Route
-                path="/agreement-drafting"
-                element={<AgreementDrafting />}
-              />
-              <Route
-                path="/secretarial-audit-toolkit"
-                element={<SecretarialAudit />}
-              />
-              <Route path="/reply-to-notice-rd" element={<ReplyToNoticeRD />} />
-              <Route
-                path="/reply-to-notice-nclt"
-                element={<ReplyToNoticeNCLT />}
-              />
-              <Route
-                path="/reply-to-notice-roc"
-                element={<ReplyToNoticeROC />}
-              />
-              <Route
-                path="/petetion-preparator"
-                element={<PetitionPreparator />}
-              />
-              <Route path="/legal-research" element={<LegalResearch />} />
-              <Route path="/legal-opinion" element={<LegalOpinion />} />
-              <Route
-                path="/regulatory-updation"
-                element={<RegulatoryUpdation />}
-              />
-              <Route
-                path="/statutory-registers"
-                element={<StatutoryRegisters />}
-              />
-              <Route
-                path="/board-meeting-assistant"
-                element={<BoardMeetingAssistant />}
-              />
-              <Route
-                path="/general-meeting-assistant"
-                element={<GeneralMeetingAssistant />}
-              />
-              <Route path="/forms" element={<Forms />} />
-              <Route
-                path="/capital-raising-advisory-agreement"
-                element={<CapitalRaisingAdvisoryAgreement />}
-              />
-              <Route path="/mini-law-library" element={<MiniLawLibrary />} />
-              <Route path="/case-digest" element={<CaseDigest />} />
-              <Route
-                path="/judgment-simulator"
-                element={<JudgmentSimulator />}
-              />
-              <Route
-                path="/research-assistant"
-                element={<ResearchAssistant />}
-              />
-              <Route
-                path="/resolution-assistant"
-                element={<ResolutionAssistant />}
-              />
-              <Route path="/email-drafter" element={<EmailDrafter />} />
-              <Route path="/text-tool" element={<TextTool />} />
-              <Route path="/text-tool/email" element={<EmailTool />} />
-              <Route path="/text-tool/letter" element={<LetterTool />} />
-              <Route path="/text-tool/report" element={<ReportTool />} />
-              <Route path="/text-tool/blog" element={<BlogTool />} />
-              <Route path="/text-tool/note" element={<NoteTool />} />
-              <Route path="/text-tool/intelligence" element={<TextIntelligenceHub />} />
-              <Route path="/business-strategist" element={<BusinessStrategist />} />
-              <Route path="/court-drafting" element={<CourtDrafting />} />
-              <Route path="/affidavit-legal-note" element={<AffidavitLegalNote />} />
-              <Route path="/court-document" element={<CourtDocument />} />
-
-            </Routes>
-          </main>
-          <Footer />
-        </div>
+        <AppContent />
       </Router>
     </ThemeProvider>
   );

@@ -5,9 +5,10 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+from database import get_gemini_key_for_request, log_usage, get_active_model_config
+
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-client = genai.Client(api_key=GEMINI_API_KEY)
 
 SESSIONS = {}
 
@@ -304,8 +305,11 @@ Rules:
 """
 }
 
-def create_session(function_type):
+def create_session(function_type, user_email=None):
     """Create a new session for a specific strategy function"""
+    api_key = get_gemini_key_for_request(user_email)
+    client = genai.Client(api_key=api_key)
+
     print("\n" + "="*50)
     print(f" CREATING NEW SESSION FOR: {function_type}")
     print("="*50)
@@ -325,13 +329,21 @@ def create_session(function_type):
 
     print(f"\n System Prompt Initialized for {function_type}")
 
+    model_cfg = get_active_model_config()
+    active_model = model_cfg.get("model_version", "gemini-2.5-flash")
+
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model=active_model,
         contents=chat_history + [{"role": "user", "parts": [{"text": "Start the consultation by asking the first question from the information collection process."}]}]
     )
 
     first_question = response.text.strip()
     print(f"\n First Question Generated:\n{first_question}")
+
+    prompt_tokens = response.usage_metadata.prompt_token_count if response.usage_metadata else 0
+    candidates_tokens = response.usage_metadata.candidates_token_count if response.usage_metadata else 0
+    total_tokens = response.usage_metadata.total_token_count if response.usage_metadata else 0
+    log_usage(user_email, f"business_strategist:start:{function_type}", "Start the consultation", first_question, prompt_tokens, candidates_tokens, total_tokens)
 
     chat_history.append({"role": "user", "parts": [{"text": "Start the consultation by asking the first question from the information collection process."}]})
     chat_history.append({"role": "model", "parts": [{"text": first_question}]})
@@ -348,8 +360,11 @@ def create_session(function_type):
 
     return session_id, first_question
 
-def next_question(session_id, answer):
+def next_question(session_id, answer, user_email=None):
     """Process user answer and generate next question or final output"""
+    api_key = get_gemini_key_for_request(user_email)
+    client = genai.Client(api_key=api_key)
+
     print("\n" + "="*50)
     print(" PROCESSING NEXT QUESTION")
     print("="*50)
@@ -393,14 +408,22 @@ Remember:
     
     chat_history.append({"role": "user", "parts": [{"text": prompt}]})
     
+    model_cfg = get_active_model_config()
+    active_model = model_cfg.get("model_version", "gemini-2.5-flash")
+
     response = client.models.generate_content(
-        model="gemini-2.5-flash",
+        model=active_model,
         contents=chat_history
     )
 
     next_q = response.text.strip()
     print(f"\n Next Response Generated:\n{next_q[:200]}...")
-    
+
+    prompt_tokens = response.usage_metadata.prompt_token_count if response.usage_metadata else 0
+    candidates_tokens = response.usage_metadata.candidates_token_count if response.usage_metadata else 0
+    total_tokens = response.usage_metadata.total_token_count if response.usage_metadata else 0
+    log_usage(user_email, f"business_strategist:next:{function_type}", prompt, next_q, prompt_tokens, candidates_tokens, total_tokens)
+
     chat_history.append({"role": "model", "parts": [{"text": next_q}]})
     
     print(f"\n Updated Chat History ({len(chat_history)} messages)")

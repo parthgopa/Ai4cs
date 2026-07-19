@@ -12,12 +12,18 @@ load_dotenv()
 # Create Blueprint for TextTool routes
 texttool_bp = Blueprint('texttool', __name__, url_prefix='/texttool')
 
+from database import get_gemini_key_for_request, log_usage, get_active_model_config
+
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 def call_gemini_api(prompt):
     """Helper function to call Gemini API"""
     try:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={GEMINI_API_KEY}"
+        user_email = request.headers.get("X-User-Email")
+        api_key = get_gemini_key_for_request(user_email)
+        model_cfg = get_active_model_config()
+        active_model = model_cfg.get("model_version", "gemini-2.0-flash")
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{active_model}:generateContent?key={api_key}"
         
         payload = {
             "contents": [
@@ -44,7 +50,21 @@ def call_gemini_api(prompt):
                 "details": response.text
             }, response.status_code
 
-        return response.json(), 200
+        res_json = response.json()
+        usage = res_json.get("usageMetadata", {})
+        prompt_tokens = usage.get("promptTokenCount", 0)
+        candidates_tokens = usage.get("candidatesTokenCount", 0)
+        total_tokens = usage.get("totalTokenCount", 0)
+        
+        response_text = ""
+        try:
+            response_text = res_json["candidates"][0]["content"]["parts"][0]["text"]
+        except Exception:
+            pass
+            
+        log_usage(user_email, request.path, prompt, response_text, prompt_tokens, candidates_tokens, total_tokens)
+
+        return res_json, 200
 
     except requests.exceptions.Timeout:
         return {"error": "Request timed out"}, 504

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Navbar, Container, Nav, Button, Offcanvas, Accordion } from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import '../styles/Header.css';
@@ -7,6 +7,10 @@ import { IoHomeOutline, IoInformationCircleOutline, IoCallOutline, IoSettings, I
 import { BsFillMoonFill, BsFillSunFill } from 'react-icons/bs';
 import Chatbot from '../components/Chatbot';
 import { getToolsByCategoryFromTools, enabledToolIdsFromTools } from '../components/Tools';
+import AuthModal from '../components/AuthModal';
+import axios from 'axios';
+import { backend_URL } from '../components/HomePage';
+
 
 const Header = () => {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -14,12 +18,96 @@ const Header = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [isChatbotOpen, setIsChatbotOpen] = useState(false);
   const [showToolsMenu, setShowToolsMenu] = useState(false);
+
+  // Authentication State
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authStage, setAuthStage] = useState("login");
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("userEmail"));
+  const [userEmail, setUserEmail] = useState(localStorage.getItem("userEmail") || "");
+  const [byokEnabled, setByokEnabled] = useState(localStorage.getItem("byokEnabled") === "true");
+  const [hasGeminiKey, setHasGeminiKey] = useState(localStorage.getItem("hasGeminiKey") === "true");
+
+  useEffect(() => {
+    const handleAuthChange = () => {
+      setIsLoggedIn(!!localStorage.getItem("userEmail"));
+      setUserEmail(localStorage.getItem("userEmail") || "");
+      setByokEnabled(localStorage.getItem("byokEnabled") === "true");
+      setHasGeminiKey(localStorage.getItem("hasGeminiKey") === "true");
+    };
+    window.addEventListener("auth-change", handleAuthChange);
+
+    const handleTriggerLogin = (e) => {
+      setAuthStage(e.detail?.stage || "login");
+      setShowAuthModal(true);
+    };
+    window.addEventListener("trigger-login", handleTriggerLogin);
+
+    // Call status API to synchronize localStorage on load/refresh
+    const syncAuthStatus = async () => {
+      const email = localStorage.getItem("userEmail");
+      if (email) {
+        try {
+          const res = await axios.post(`${backend_URL}/api/auth/status`, {}, {
+            headers: { "X-User-Email": email }
+          });
+          if (res.data.is_logged_in) {
+            localStorage.setItem("byokEnabled", res.data.byok_enabled ? "true" : "false");
+            localStorage.setItem("hasGeminiKey", res.data.has_key ? "true" : "false");
+            localStorage.setItem("geminiApiKey", res.data.api_key || "");
+            handleAuthChange();
+          } else {
+            // Clear invalid session
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("authToken");
+            localStorage.removeItem("hasGeminiKey");
+            localStorage.removeItem("byokEnabled");
+            localStorage.removeItem("geminiApiKey");
+            handleAuthChange();
+          }
+        } catch (err) {
+          console.error("Auth status sync failed:", err);
+        }
+      }
+    };
+    syncAuthStatus();
+
+    return () => {
+      window.removeEventListener("auth-change", handleAuthChange);
+      window.removeEventListener("trigger-login", handleTriggerLogin);
+    };
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("hasGeminiKey");
+    localStorage.removeItem("byokEnabled");
+    localStorage.removeItem("geminiApiKey");
+    window.dispatchEvent(new Event("auth-change"));
+    navigate("/");
+  };
+
   
   const toggleChatbot = () => setIsChatbotOpen(!isChatbotOpen);
   const toolsByCategory = getToolsByCategoryFromTools();
   // console.log(toolsByCategory)
   
   const handleToolClick = (route) => {
+    const loggedIn = !!localStorage.getItem("userEmail");
+    if (!loggedIn) {
+      setAuthStage("login");
+      setShowAuthModal(true);
+      return;
+    }
+
+    const byok = localStorage.getItem("byokEnabled") === "true";
+    const hasKey = localStorage.getItem("hasGeminiKey") === "true";
+    if (byok && !hasKey) {
+      setAuthStage("key");
+      setShowAuthModal(true);
+      return;
+    }
+
     navigate(route);
     setShowToolsMenu(false);
     setShowMenu(false);
@@ -34,6 +122,7 @@ const Header = () => {
             <img src="/logo.jpg" alt="Logo" className="logo" />
           </div>
         </Navbar.Brand>
+
         
         {/* Chatbot Toggle Button - Center */}
         <div className="chatbot-header-toggle d-flex justify-content-center flex-grow-1">
@@ -110,9 +199,56 @@ const Header = () => {
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="align-items-lg-center ms-lg-auto">
+              {/* Mobile Auth Section at the top of menu */}
+              <div className="d-lg-none border-bottom pb-3 mb-3 w-100">
+                {!isLoggedIn ? (
+                  <div className="d-flex gap-2">
+                    <Button 
+                      variant="outline-primary" 
+                      className="w-50" 
+                      onClick={() => { setAuthStage("login"); setShowAuthModal(true); setShowMenu(false); }}
+                    >
+                      Login
+                    </Button>
+                    <Button 
+                      variant="primary" 
+                      className="w-50" 
+                      onClick={() => { setAuthStage("signup"); setShowAuthModal(true); setShowMenu(false); }}
+                      style={{ backgroundColor: "var(--primary-color)" }}
+                    >
+                      Sign Up
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <div className="text-muted small mb-2 text-truncate">👤 Logged in as: <strong>{userEmail}</strong></div>
+                    <div className="d-flex gap-2">
+                      {byokEnabled && (
+                        <Button
+                          variant={hasGeminiKey ? "outline-success" : "outline-warning"}
+                          className="w-50 py-1"
+                          onClick={() => { setAuthStage("key"); setShowAuthModal(true); setShowMenu(false); }}
+                          style={{ fontSize: "13px" }}
+                        >
+                          {hasGeminiKey ? "Gemini Key ✓" : "Set Gemini Key ⚠️"}
+                        </Button>
+                      )}
+                      <Button 
+                        variant="outline-danger" 
+                        className={byokEnabled ? "w-50 py-1" : "w-100 py-1"} 
+                        onClick={() => { handleLogout(); setShowMenu(false); }}
+                      >
+                        Logout
+                      </Button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <Nav.Link as={Link} to="/" className="nav-link" onClick={() => setShowMenu(false)}> 
                 <IoHomeOutline size={20} className='navbar-buttons'/> Home
               </Nav.Link>
+
               
               {/* Desktop: Hover Dropdown */}
               <div 
@@ -206,6 +342,55 @@ const Header = () => {
               <Nav.Link as={Link} to="/contact" className="nav-link" onClick={() => setShowMenu(false)}> 
                 <IoCallOutline size={20} className='navbar-buttons'/> Contact Us
               </Nav.Link>
+
+              {/* Desktop Right-side Auth Section */}
+              <div className="d-none d-lg-flex align-items-center ms-lg-3 header-auth-section">
+                {!isLoggedIn ? (
+                  <>
+                    <Button 
+                      variant="outline-primary" 
+                      size="sm" 
+                      className="me-2" 
+                      onClick={() => { setAuthStage("login"); setShowAuthModal(true); }}
+                      style={{ borderRadius: "8px", fontWeight: "600" }}
+                    >
+                      Login
+                    </Button>
+                    <Button 
+                      variant="primary" 
+                      size="sm" 
+                      onClick={() => { setAuthStage("signup"); setShowAuthModal(true); }}
+                      style={{ borderRadius: "8px", fontWeight: "600", backgroundColor: "var(--primary-color)" }}
+                    >
+                      Sign Up
+                    </Button>
+                  </>
+                ) : (
+                  <div className="profile-dropdown-container">
+                    <div className="profile-circle" title={userEmail}>
+                      {userEmail ? userEmail[0].toUpperCase() : "U"}
+                    </div>
+                    <div className="profile-dropdown-menu">
+                      <div className="dropdown-user-email">👤 {userEmail}</div>
+                      <hr className="dropdown-divider" />
+                      {byokEnabled && (
+                        <button
+                          className={`dropdown-item-btn gemini-btn ${hasGeminiKey ? 'key-configured' : 'key-missing'}`}
+                          onClick={() => { setAuthStage("key"); setShowAuthModal(true); }}
+                        >
+                          {hasGeminiKey ? "Gemini Key ✓" : "Set Gemini Key ⚠️"}
+                        </button>
+                      )}
+                      <button 
+                        className="dropdown-item-btn logout-btn" 
+                        onClick={handleLogout}
+                      >
+                        Logout
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
               <Button
                 variant="outline-secondary"
                 className="theme-toggle ms-lg-3 my-2 d-lg-none d-flex align-items-center"
@@ -225,6 +410,13 @@ const Header = () => {
       
       {/* Chatbot Component */}
       <Chatbot isOpen={isChatbotOpen} toggleChatbot={toggleChatbot} />
+
+      {/* Authentication and Gemini Key Modal */}
+      <AuthModal 
+        show={showAuthModal} 
+        onHide={() => setShowAuthModal(false)} 
+        initialStage={authStage} 
+      />
     </Navbar>
   );
 };
