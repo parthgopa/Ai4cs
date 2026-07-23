@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form, Alert, Spinner } from "react-bootstrap";
+import { Modal, Button, Form, Alert, Spinner, InputGroup } from "react-bootstrap";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 import axios from "axios";
 import { backend_URL } from "./HomePage";
 
@@ -10,7 +11,11 @@ const AuthModal = ({ show, onHide, initialStage = "login" }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otp, setOtp] = useState("");
   const [apiKey, setApiKey] = useState("");
-  
+
+  const [showApiKey, setShowApiKey] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -23,6 +28,9 @@ const AuthModal = ({ show, onHide, initialStage = "login" }) => {
       setPassword("");
       setConfirmPassword("");
       setOtp("");
+      setShowApiKey(false);
+      setShowPassword(false);
+      setShowConfirmPassword(false);
     }
   }, [show, initialStage]);
 
@@ -48,7 +56,7 @@ const AuthModal = ({ show, onHide, initialStage = "login" }) => {
       localStorage.setItem("hasGeminiKey", res.data.has_key ? "true" : "false");
       localStorage.setItem("byokEnabled", res.data.byok_enabled ? "true" : "false");
       localStorage.setItem("geminiApiKey", res.data.api_key || "");
-      
+
       // Dispatch custom event to notify Header and Tools
       window.dispatchEvent(new Event("auth-change"));
 
@@ -107,7 +115,7 @@ const AuthModal = ({ show, onHide, initialStage = "login" }) => {
       localStorage.setItem("authToken", "verified_session");
       localStorage.setItem("hasGeminiKey", "false");
       localStorage.setItem("byokEnabled", res.data.byok_enabled ? "true" : "false");
-      
+
       window.dispatchEvent(new Event("auth-change"));
 
       if (res.data.byok_enabled) {
@@ -135,14 +143,14 @@ const AuthModal = ({ show, onHide, initialStage = "login" }) => {
     setError("");
     setLoading(true);
     try {
-      const res = await axios.post(`${backend_URL}/api/auth/save-key`, 
+      const res = await axios.post(`${backend_URL}/api/auth/save-key`,
         { api_key: apiKey },
         { headers: { "X-User-Email": email || localStorage.getItem("userEmail") } }
       );
       setMessage(res.data.message || "API key registered successfully!");
       localStorage.setItem("hasGeminiKey", "true");
       localStorage.setItem("geminiApiKey", apiKey);
-      
+
       window.dispatchEvent(new Event("auth-change"));
 
       setTimeout(() => {
@@ -183,22 +191,32 @@ const AuthModal = ({ show, onHide, initialStage = "login" }) => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <InputGroup>
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setShowPassword(!showPassword)}
+                  type="button"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+              </InputGroup>
             </Form.Group>
             <Button variant="primary" type="submit" className="w-100 mt-2 btn-primary" disabled={loading}>
               {loading ? <Spinner size="sm" animation="border" /> : "Login"}
             </Button>
             <div className="text-center mt-3 small">
               Don't have an account?{" "}
-              <span 
-                className="text-primary cursor-pointer" 
-                style={{ cursor: "pointer", fontWeight: "600" }} 
+              <span
+                className="text-primary cursor-pointer"
+                style={{ cursor: "pointer", fontWeight: "600" }}
                 onClick={() => { setStage("signup"); setError(""); setMessage(""); }}
               >
                 Sign Up
@@ -221,32 +239,52 @@ const AuthModal = ({ show, onHide, initialStage = "login" }) => {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
+              <InputGroup>
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setShowPassword(!showPassword)}
+                  type="button"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  {showPassword ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+              </InputGroup>
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Confirm Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Confirm password"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
+              <InputGroup>
+                <Form.Control
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Confirm password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  type="button"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+              </InputGroup>
             </Form.Group>
             <Button variant="primary" type="submit" className="w-100 mt-2 btn-primary" disabled={loading}>
               {loading ? <Spinner size="sm" animation="border" /> : "Send Verification OTP"}
             </Button>
             <div className="text-center mt-3 small">
               Already have an account?{" "}
-              <span 
-                className="text-primary cursor-pointer" 
-                style={{ cursor: "pointer", fontWeight: "600" }} 
+              <span
+                className="text-primary cursor-pointer"
+                style={{ cursor: "pointer", fontWeight: "600" }}
                 onClick={() => { setStage("login"); setError(""); setMessage(""); }}
               >
                 Login
@@ -278,9 +316,9 @@ const AuthModal = ({ show, onHide, initialStage = "login" }) => {
             </Button>
             <div className="text-center mt-3 small">
               Need to change email?{" "}
-              <span 
-                className="text-primary cursor-pointer" 
-                style={{ cursor: "pointer", fontWeight: "600" }} 
+              <span
+                className="text-primary cursor-pointer"
+                style={{ cursor: "pointer", fontWeight: "600" }}
                 onClick={() => { setStage("signup"); setError(""); setMessage(""); }}
               >
                 Go Back
@@ -303,13 +341,23 @@ const AuthModal = ({ show, onHide, initialStage = "login" }) => {
             </div>
             <Form.Group className="mb-3">
               <Form.Label>Gemini API Key</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="AIzaSy..."
-                value={apiKey}
-                onChange={(e) => setApiKey(e.target.value)}
-                required
-              />
+              <InputGroup>
+                <Form.Control
+                  type={showApiKey ? "text" : "password"}
+                  placeholder="Enter your Gemini API key..."
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  required
+                />
+                <Button
+                  variant="outline-secondary"
+                  onClick={() => setShowApiKey(!showApiKey)}
+                  type="button"
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  {showApiKey ? <FaEyeSlash /> : <FaEye />}
+                </Button>
+              </InputGroup>
             </Form.Group>
             <Button variant="primary" type="submit" className="w-100 mt-2 btn-primary" disabled={loading}>
               {loading ? <Spinner size="sm" animation="border" /> : "Save API Key"}

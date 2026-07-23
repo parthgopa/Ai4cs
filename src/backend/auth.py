@@ -7,7 +7,8 @@ from database import (
     hash_password,
     verify_password,
     encrypt_key,
-    decrypt_key
+    decrypt_key,
+    get_active_model_config
 )
 from email_utils import send_otp_email
 
@@ -185,16 +186,14 @@ def save_key():
         if not api_key:
             return jsonify({"error": "Gemini API key is required"}), 400
 
-        # Validate that it looks like a Gemini key (typically starts with AIzaSy)
-        if not api_key.startswith("AIzaSy"):
-            return jsonify({"error": "Invalid Gemini API Key format (must start with 'AIzaSy')"}), 400
-
         # Validate the API key with a test call to Gemini
         try:
             from google import genai
             test_client = genai.Client(api_key=api_key)
+            model_config = get_active_model_config()
+            active_model = model_config.get("model_version", "gemini-2.5-flash")
             test_client.models.generate_content(
-                model="gemini-2.5-flash",
+                model=active_model,
                 contents="ping"
             )
         except Exception as e:
